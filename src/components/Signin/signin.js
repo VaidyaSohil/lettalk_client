@@ -17,6 +17,9 @@ class Sign_in extends React.Component {
         //if fails, send to landing page but error code
         if(response.profileObj.email!== "") {
             var data = {username:response.profileObj.email}
+            localStorage.setItem('username', response.profileObj.email)
+            localStorage.setItem('token',response.tokenId)
+
             dispatch(submitLogin(data))
         }
         else

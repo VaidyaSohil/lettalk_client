@@ -15,7 +15,7 @@ class Landing_Page extends React.Component {
         return (
             <Row className="text-center">
                 <Col>
-                    {this.props.username ? <h1>Hi {this.props.username} </h1> : <Welcome/>}
+                    {this.props.username !== " " ? <h1>Hi {this.props.username} </h1> : <Welcome/>}
                 </Col>
             </Row>
         )
