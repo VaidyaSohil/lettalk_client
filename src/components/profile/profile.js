@@ -14,7 +14,6 @@ class Profile extends React.Component {
     componentDidMount() {
         const env = runtimeEnv();
         var data = {email:localStorage.getItem('username')}
-        console.log(data)
         return fetch(`${env.REACT_APP_API_URL}/userProfile?email=` + data.email, {
             method: 'GET',
             headers: {
@@ -28,7 +27,7 @@ class Profile extends React.Component {
                 return response.json();
             })
             .then( (res) => {
-                let userProfile = res.msg.USER_PROFILE
+                let userProfile = res.msg
                 this.setState({
                         alias:userProfile.alias,
                         age:userProfile.age,
