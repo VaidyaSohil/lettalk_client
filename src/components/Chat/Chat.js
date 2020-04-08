@@ -21,6 +21,7 @@ const Chat = ({location}) => {  //location is a built in react command you can u
     const [getRoom, setGetRoom]    = useState(false)
     const [waiting, setWaiting]   = useState(true)
     const ENDPOINT = env.REACT_APP_API_URL
+    alert(ENDPOINT)
     var username = ""
     var room_id = ""
     //Check if a room is available
