@@ -12,6 +12,7 @@ import runtimeEnv from "@mars/heroku-js-runtime-env";
 const history = createBrowserHistory();
 
 let socket;
+const env = runtimeEnv();
 
 const Chat = ({location}) => {  //location is a built in react command you can use to get the url
     const [users, setUsers] = useState('');
@@ -19,7 +20,7 @@ const Chat = ({location}) => {  //location is a built in react command you can u
     const [messages, setMessages] = useState([]);
     const [getRoom, setGetRoom]    = useState(false)
     const [waiting, setWaiting]   = useState(true)
-    const ENDPOINT = 'localhost:5000';  //current ENDPOINT for our server
+    const ENDPOINT = env.REACT_APP_API_URL
     var username = ""
     var room_id = ""
     //Check if a room is available
@@ -27,7 +28,6 @@ const Chat = ({location}) => {  //location is a built in react command you can u
         console.log("waiting:", waiting)
         console.log("Get Room:", getRoom)
         async function getAvailRoom() {
-            const env = runtimeEnv();
             const response = await  fetch(`${env.REACT_APP_API_URL}/checkAvailable?roomId=${localStorage.getItem('roomId')}`, {
                 method: 'GET',
                 headers: {
@@ -63,7 +63,7 @@ const Chat = ({location}) => {  //location is a built in react command you can u
 
 
     useEffect(() => {
-           
+
             if(localStorage.getItem('roomId')){
                 history.push({path:location.pathname,search: `room=${localStorage.getItem('roomId')}&name=${localStorage.getItem('username')}`})
                 console.log("Get room when come in",getRoom)
