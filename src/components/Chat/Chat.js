@@ -1,39 +1,132 @@
 // Chat.js for the chat page
-import React, {useState, useEffect} from 'react';   //react builtin hooks - useState/useEffect
+import React, {useState, useEffect, Component} from 'react';   //react builtin hooks - useState/useEffect
 import queryString from 'query-string';
 import io from 'socket.io-client';
-
+import {createBrowserHistory} from 'history';
 import './Chat.css';
-
 import InfoBar from '../InfoBar/InfoBar';
 import Input from '../Input/Input';
 import Messages from '../Messages/Messages';
 import TextContainer from '../TextContainer/TextContainer';
+import runtimeEnv from "@mars/heroku-js-runtime-env";
+const history = createBrowserHistory();
 
 let socket;
 
 const Chat = ({location}) => {  //location is a built in react command you can use to get the url
-    const [name, setName] = useState('');   //useState take 1 param (initial value) and return two values. They are current value and the function to set the value
-    const [room, setRoom] = useState('');
     const [users, setUsers] = useState('');
     const [message, setMessage] = useState('');
     const [messages, setMessages] = useState([]);
+    const [getRoom, setGetRoom]    = useState(false)
+    const [waiting, setWaiting]   = useState(true)
     const ENDPOINT = 'localhost:5000';  //current ENDPOINT for our server
+    var username = ""
+    var room_id = ""
+    //Check if a room is available
+    React.useEffect(() => {
+        console.log("waiting:", waiting)
+        console.log("Get Room:", getRoom)
+        async function getAvailRoom() {
+            const env = runtimeEnv();
+            const response = await  fetch(`${env.REACT_APP_API_URL}/checkAvailable?roomId=${localStorage.getItem('roomId')}`, {
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                mode: 'cors'
+            })
+                .then((response) => {
+                    if (!response.ok) {
+                        throw Error(response.statusText);
+                    }
+                    return response.json();
+                })
+                .then((res) => {
+                    setWaiting(false)
+                    return res
+                })
+                .catch((e) => {
+                    console.log(e)
+                    }
+                )
+            return {}
+        }
+        if(waiting === true) {
+            getAvailRoom()
+        }
+        else{
+            console.log("Doesn't call again")
+        }
+
+    }, [getRoom,waiting])
+
+
 
     useEffect(() => {
-        const {name, room} = queryString.parse(location.search);    //parsing the parameter "?name=sdasd&room=vvvv" and storing it in name and room respectively
-
-        socket = io(ENDPOINT);  //io(url) where url needs to be the endpoint of the server
-
-        setName(name);  //setting the updated name and room using react-hook "useState"
-        setRoom(room);
-
-        socket.emit('join', {name, room}, (error) =>{
-            if(error){
-                alert(error);
+           
+            if(localStorage.getItem('roomId')){
+                history.push({path:location.pathname,search: `room=${localStorage.getItem('roomId')}&name=${localStorage.getItem('username')}`})
+                console.log("Get room when come in",getRoom)
             }
-        });
-    }, [ENDPOINT, location.search]);    //only if ENDPOINT and location.search change, we need to change otherwise we don't need to change//this code added=> ",[ENDPOINT, location.search]" because we are specifying when to run useEffect, otherwise it's gonna have multiple connections set up "We have a new connection!!" message
+            else{
+
+                setWaiting(true)
+                const env = runtimeEnv();
+                fetch(`${env.REACT_APP_API_URL}/room?username= + ${localStorage.getItem('username')}`, {
+                    method: 'GET',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    mode: 'cors'
+                })
+                    .then((response) => {
+                        if (!response.ok) {
+                            throw Error(response.statusText);
+                        }
+                        return response.json();
+                    })
+                    .then((res) => {
+                        if (res.success ) {
+                            if(getRoom === false) {
+                               setGetRoom(true)
+                                localStorage.setItem('roomId', res.msg)
+                                history.push({
+                                    path: location.pathname,
+                                    search: `room=${localStorage.getItem('roomId')}&name=${localStorage.getItem('username')}`
+                                })
+                            }
+                        }
+                    })
+                    .catch((e) => {
+                            console.log(e)
+                        }
+                    )
+
+
+
+            }
+
+            socket = io(ENDPOINT);  //io(url) where url needs to be the endpoint of the server
+
+            username = localStorage.getItem('username')
+            room_id = localStorage.getItem('roomId')
+            console.log(username,room_id)
+            if(username && room_id){
+                socket.emit('join', {name:username, room:room_id}, (error) => {
+                    if (error) {
+                        console.log(error);
+                    }
+                });
+            }
+            return () =>{
+                username = localStorage.getItem('username')
+                room_id = localStorage.getItem('roomId')
+              setWaiting(true)
+              setGetRoom(false)
+                socket.disconnect()
+            }
+    },   [location.search]);    //only if ENDPOINT and location.search change, we need to change otherwise we don't need to change//this code added=> ",[ENDPOINT, location.search]" because we are specifying when to run useEffect, otherwise it's gonna have multiple connections set up "We have a new connection!!" message
+
 
     useEffect(() => {
         socket.on('message', (message) => { //listen for messages as 'message' is the key message in the backend
@@ -56,16 +149,21 @@ const Chat = ({location}) => {  //location is a built in react command you can u
     }
 
 
-    return( //passing room={room} in InfoBar component as we are sending the room name dynamically
-        <div className = "outerContainer">
-            <div className = "container">
-                <InfoBar room={room} />
-                <Messages messages={messages} name={name}/>
-                <Input message={message} setMessage={setMessage} sendMessage={sendMessage} />
-            </div>
-            <TextContainer users={users}/>
-        </div>
-    )
+        return ( //passing room={room} in InfoBar component as we are sending the room name dynamically
+            <div>
+            {
+                waiting ? (<div>Please wait, we are matching you...</div>) : (
+                    <div className="outerContainer">
+                        <div className="container">
+                            <InfoBar room={room_id}/>
+                            <Messages messages={messages} name={username}/>
+                            <Input message={message} setMessage={setMessage} sendMessage={sendMessage}/>
+                        </div>
+                        <TextContainer users={users}/>
+                    </div>
+                )
+            }</div>
+            )
 }
 
 export default Chat;

@@ -3,6 +3,11 @@ import {Navbar, NavItem, Nav,Container} from 'react-bootstrap';
 import { connect } from 'react-redux'
 import {Link} from 'react-router-dom';
 import {submitLogout} from '../../action/signout'
+
+
+
+let roomid="123"
+let name="name"
 class LetTalkHeader extends Component {
     constructor(props) {
         super(props);
@@ -11,6 +16,7 @@ class LetTalkHeader extends Component {
         const {dispatch} = this.props;
         dispatch(submitLogout())
     }
+
     render() {
         return (
             <div>
@@ -21,6 +27,7 @@ class LetTalkHeader extends Component {
                               {
                                   this.props.loggedIn ? (
                                       <div >
+                                         <NavItem > < Link to="/chat" >Chat</Link></NavItem>
                                          <NavItem > < Link to="/profile" >Profile</Link></NavItem>
                                          <NavItem > < Link to="/logout" onClick={this.handleLogout.bind(this)}>Logout</Link></NavItem>
                                       </div>

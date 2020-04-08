@@ -10,6 +10,8 @@ import Profile from './components/profile/profile'
 import store from './stores/stores'
 import { Provider } from 'react-redux'
 
+let roomid="123"
+let name="name"
 
 const App = () =>(
     <Provider store={store}>
@@ -18,7 +20,7 @@ const App = () =>(
             <Route path="/" exact component={Landing_Page}/>
             <Route path="/login" exact component={Sign_in}/>
             <Route path="/profile" exact component={Profile}/>
-            <Route path="/chat" component={Chat}/>
+            <Route path="/chat" exact component={Chat}/>
         </Router>
     </Provider>
 )
