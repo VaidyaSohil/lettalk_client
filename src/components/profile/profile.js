@@ -50,7 +50,7 @@ class Profile extends React.Component {
         e.preventDefault()
         var data = {alias: this.state.alias,age:this.state.age ,hobby:this.state.hobby,interest: this.state.interest,gender:this.state.gender,
         picture:this.state.picture
-            ,email: localStorage.getItem('username')
+            ,email: localStorage.getItem('email')
         }
         console.log(data)
         const env = runtimeEnv();
