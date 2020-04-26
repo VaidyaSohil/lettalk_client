@@ -13,7 +13,8 @@ class Profile extends React.Component {
     }
     componentDidMount() {
         const env = runtimeEnv();
-        var data = {email:localStorage.getItem('username')}
+        var data = {email:localStorage.getItem('email')}
+        console.log("email",data.email)
         return fetch(`${env.REACT_APP_API_URL}/userProfile?email=` + data.email, {
             method: 'GET',
             headers: {
