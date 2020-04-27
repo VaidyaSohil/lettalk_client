@@ -3,18 +3,33 @@ import React from 'react';
 
 import './Input.css';
 
-const Input = ({message, setMessage, sendMessage}) => ( //to display the room name dynamically, in chat.js we passed in the the InfoBar tag with room property with the room name
-    <form className="form">
-        <input
-            className="input"
-            type="text"
-            placeholder="Type a message..."
-            value={message}
-            onChange={(event) => setMessage(event.target.value)}
-            onKeyPress={event => event.key === 'Enter' ? sendMessage(event) : null}
-        />
-        <button className="sendButton" onClick={(event) => sendMessage(event)}>Send</button>
-    </form>
-);
+
+class Input extends React.Component {
+    constructor(props) {
+        super(props);
+        this.messageHandler = this.messageHandler.bind(this)
+    }
+
+    messageHandler(e){
+        this.props.onMessageChange(e.target.value)
+    }
+
+    render() {
+        return (
+        <form className="form">
+            <input
+                className="input"
+                type="text"
+                placeholder="Type a message..."
+                value={this.props.message}
+                onChange={this.messageHandler}
+                onKeyPress={event => event.key === 'Enter' ? this.props.sendMessage(event) : null}
+            />
+
+        </form>
+        )
+    }}
+
+
 
 export default Input;

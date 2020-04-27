@@ -5,6 +5,7 @@ import { GoogleLogin } from 'react-google-login';
 import {submitLogin} from "../../action/signin";
 import { connect } from 'react-redux'
 import Landing_Page from '../LandingPage/LandingPage'
+import style from "../LandingPage/css.css";
 
 class Sign_in extends React.Component {
     constructor(props) {
@@ -37,13 +38,16 @@ render() {
             }}
         >
             {
-               this.props.loggedIn ?  <Landing_Page/>:  <GoogleLogin
-                   clientId="163619598811-ml35o7678ggr86kv1btdc8n9qg64fc36.apps.googleusercontent.com"
-                   buttonText="Login"
-                   onSuccess={this.responseGoogle.bind(this)}
-                   onFailure={this.responseGoogle.bind(this)}
-                   cookiePolicy={'single_host_origin'}
-               />
+               this.props.loggedIn ?  <Landing_Page/>:
+
+                <GoogleLogin
+                clientId="163619598811-ml35o7678ggr86kv1btdc8n9qg64fc36.apps.googleusercontent.com"
+                buttonText="Login"
+                onSuccess={this.responseGoogle.bind(this)}
+                onFailure={this.responseGoogle.bind(this)}
+                cookiePolicy={'single_host_origin'}
+                />
+                
             }
         </div>
 

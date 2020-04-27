@@ -19,12 +19,6 @@ export function exitChat(){
                 }
                 return response.json();
             })
-            .then((res) => {
-                    if (res.success) {
-                        console.log("Success")
-                    }
-                }
-            )
             .catch((e) => {
                     console.log(e)
                 }

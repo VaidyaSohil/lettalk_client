@@ -6,8 +6,6 @@ import {submitLogout} from '../../action/signout'
 
 
 
-let roomid="123"
-let name="name"
 class LetTalkHeader extends Component {
     constructor(props) {
         super(props);
