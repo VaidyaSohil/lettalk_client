@@ -10,8 +10,7 @@ import Profile from './components/profile/profile'
 import store from './stores/stores'
 import { Provider } from 'react-redux'
 
-let roomid="123"
-let name="name"
+
 
 const App = () =>(
     <Provider store={store}>
