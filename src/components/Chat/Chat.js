@@ -107,78 +107,70 @@ class Chat extends React.Component{
                         localStorage.setItem('roomId', response.msg)
                         localStorage.setItem('percent', response.percent)
 
+                        let answer = window.confirm(`This person match ${localStorage.getItem('percent')} , Do you want to continue?`)
+
+                        if (answer === true){
+                            //yes
+                            this.setState({accept:true, roomIsActive:true})
+                            history.push({
+                                path: '/room',
+                                search: `room=${localStorage.getItem('roomId')}&name=${localStorage.getItem('email')}`
+                            })
+
+
+                            this.setState({name:localStorage.getItem('email'), room:localStorage.getItem('roomId')})
+
+                            if (typeof(this.state.name) !== "undefined" && typeof (this.state.room) !== "undefined") {
+                                console.log("Join name and room",this.state.name,this.state.room)
+                                socket.emit('join', { name: this.state.name ,room: this.state.room } , () => {
+                                })
+                            }
+                            else{
+                                alert("Something wrong, please refresh the page")
+                            }
+                            //Check room is active
+                            let id_roomActive = setInterval(
+                                async ()=> {
+                                    const response = await checkRoomActive()
+                                    if(!response.success){
+                                        console.log("clear interval")
+                                        this.setState({roomIsActive:false})
+                                        alert("Sorry, they quit, we will redirect you to the main page")
+                                        clearInterval(id_roomActive)
+                                        history.push('/')
+                                        window.location.href = '/'
+                                    }
+                                }
+                                , 1500);
+
+
+                        }
+                        else if(answer === false){
+                            const {dispatch} = this.props;
+                            dispatch(exitChat())
+                            socket.emit('disconnect',() => {
+                            })
+                            this.setState({waiting: true});
+                            history.push('/')
+                            window.location.href = '/'
+
+                        }
                     }
                 }
-                , 3000);
+                , 1500);
 
         }
 
     }
+
 
     componentWillUnmount() {
         const {dispatch} = this.props;
         dispatch(exitChat())
-        socket.on('disconnect', function() {
-            console.log('Got disconnect!');
-        });
+        history.push('/')
+        window.location.href = '/'
     }
 
-    componentDidUpdate(prevProps) {
-        if(this.state.waiting === false && this.state.accept === false){
-            let answer = window.confirm(`This person match ${localStorage.getItem('percent')} , Do you want to continue?`)
-            if (answer === true){
-                //yes
-                    this.setState({accept:true, roomIsActive:true})
-                    history.push({
-                            path: '/room',
-                            search: `room=${localStorage.getItem('roomId')}&name=${localStorage.getItem('email')}`
-                        })
-
-
-                    this.setState({name:localStorage.getItem('email'), room:localStorage.getItem('roomId')})
-
-                    if (typeof(this.state.name) !== "undefined" && typeof (this.state.room) !== "undefined") {
-                            socket.emit('join', { name:localStorage.getItem('email'),room:localStorage.getItem('roomId') })
-                    }
-                    else{
-                            alert("Something wrong, please refresh the page")
-                    }
-                //Check room is active
-                let id_roomActive = setInterval(
-                    async ()=> {
-                        const response = await checkRoomActive()
-                        if(!response.success){
-                            console.log("clear interval")
-                            this.setState({roomIsActive:false})
-                            clearInterval(id_roomActive)
-                        }
-                    }
-                    , 1500);
-
-
-            }
-            else if(answer === false){
-                    const {dispatch} = this.props;
-                    dispatch(exitChat())
-                    this.setState({waiting: true});
-                    alert("Sorry, they quit, we will redirect you to the main page")
-                    history.push('/')
-                    window.location.href = '/'
-
-            }
-        }
-        else if(this.state.roomIsActive === false && this.state.waiting === false){
-            //Redirect
-            const {dispatch} = this.props;
-            dispatch(exitChat())
-            this.setState({waiting:true});
-            alert("Sorry, they quit, we will redirect you to the main page")
-            history.push('/')
-            window.location.href = '/'
-        }
-
-
-    }
 
     handleMessage(message){
         this.setState({message: message})
