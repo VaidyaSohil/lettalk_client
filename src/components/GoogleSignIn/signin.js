@@ -3,6 +3,7 @@ import { Button, FormGroup, FormControl, FormLabel  } from "react-bootstrap";
 import "./signin.css";
 import { GoogleLogin } from 'react-google-login';
 import {submitLogin} from "../../action/signin";
+import {submitLogout} from "../../action/signout"
 import { connect } from 'react-redux'
 import Landing_Page from '../LandingPage/LandingPage'
 import style from "../LandingPage/css.css";
@@ -16,7 +17,7 @@ class Sign_in extends React.Component {
         const {dispatch} = this.props;
         //If success then send to landing page with username
         //if fails, send to landing page but error code
-        if(response.profileObj.email!== "") {
+        if(response.profileObj.email !== "") {
             var data = {username:response.profileObj.email}
             localStorage.setItem('email', response.profileObj.email)
             localStorage.setItem('token',response.tokenId)
@@ -25,7 +26,7 @@ class Sign_in extends React.Component {
         }
         else
         {
-            console.log("error here")
+            dispatch(submitLogout())
         }
     }
 

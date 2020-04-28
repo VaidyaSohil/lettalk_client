@@ -27,7 +27,7 @@ class LetTalkHeader extends Component {
                                       <div >
                                          <NavItem > < Link to="/chat" >Chat</Link></NavItem>
                                          <NavItem > < Link to="/profile" >Profile</Link></NavItem>
-                                         <NavItem > < Link to="/logout" onClick={this.handleLogout.bind(this)}>Logout</Link></NavItem>
+                                         <NavItem > < Link to="/" onClick={this.handleLogout.bind(this)}>Logout</Link></NavItem>
                                       </div>
                                       )
                                   : (<NavItem><Link to="/login">Login</Link></NavItem>)
