@@ -217,7 +217,8 @@ class Chat extends React.Component{
         return ( //passing room={room} in InfoBar component as we are sending the room name dynamically
             <div>
                 {
-                    this.state.accept ? (
+                    localStorage.getItem('email')?    (
+                    this.state.accept  ? (
                         <div className="outerContainer" >
                             <div className="container" style={{width:'100vw',height:'80vh'}}>
                                 <InfoBar room={this.state.room}/>
@@ -227,6 +228,9 @@ class Chat extends React.Component{
                             <TextContainer users={this.state.users}/>
                         </div>
                     ): (<div>Please wait, we are matching you...</div>)
+                    )
+                        : <div>Dude, you need to log in</div>
+
                 }</div>
         )
     }

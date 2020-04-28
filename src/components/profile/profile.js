@@ -48,7 +48,7 @@ class Profile extends React.Component {
 
     handleSubmit(e){
         e.preventDefault()
-        var data = {alias: this.state.alias,age:this.state.age ,hobby:this.state.hobby,interest: this.state.interest,gender:this.state.gender,
+        var data = {alias: this.state.alias,age:this.state.age ,hobby: this.state.hobby, interest: this.state.interest,gender:this.state.gender,
         picture:this.state.picture
             ,email: localStorage.getItem('email')
         }
