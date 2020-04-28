@@ -4,8 +4,7 @@ import runtimeEnv from "@mars/heroku-js-runtime-env";
 export function exitChat(){
     const env = runtimeEnv();
     let data = {'roomId': localStorage.getItem('roomId')}
-    return dispatch => {
-        fetch(`${env.REACT_APP_API_URL}/room`, {
+    return fetch(`${env.REACT_APP_API_URL}/room`, {
             method: 'delete',
             headers: {
                 'Content-Type': 'application/json'
@@ -23,5 +22,4 @@ export function exitChat(){
                     console.log(e)
                 }
             )
-    }
 }

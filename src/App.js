@@ -2,7 +2,7 @@ import React from 'react'
 import 'bootstrap/dist/css/bootstrap.min.css';
 import{ BrowserRouter as Router, Route} from 'react-router-dom';
 import Chat from './components/Chat/Chat';
-import Sign_in from './components/Signin/signin'
+import Sign_in from './components/GoogleSignIn/signin'
 import Landing_Page from './components/LandingPage/LandingPage'
 import LetTalkHeader from "./components/lettalkheader/lettalkheader";
 import Profile from './components/profile/profile'

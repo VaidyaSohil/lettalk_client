@@ -157,26 +157,34 @@ class Chat extends React.Component{
                                 async ()=> {
                                     const response = await checkRoomActive()
                                     if(!response.success){
-                                        console.log("clear interval")
-                                        this.setState({roomIsActive:false})
-                                        alert("Sorry, they quit, we will redirect you to the main page")
                                         clearInterval(id_roomActive)
-                                        history.push('/')
-                                        window.location.href = '/'
+                                        exitChat().then(response => {
+                                            if (response.success) {
+                                                socket.emit('disconnect', () => {
+                                                })
+                                                alert("Sorry, they quit, we will redirect you to the main page")
+                                                history.push('/')
+                                                window.location.href = '/'
+                                            }
+                                        })
                                     }
                                 }
                                 , 1500);
 
 
                         }
+
                         else if(answer === false){
-                            const {dispatch} = this.props;
-                            dispatch(exitChat())
-                            socket.emit('disconnect',() => {
-                            })
-                            this.setState({waiting: true});
-                            history.push('/')
-                            window.location.href = '/'
+                           exitChat().then(res =>{
+                               if(res.success){
+                                   socket.emit('disconnect', () => {
+                                   })
+                                   history.push('/')
+                                   window.location.href = '/'
+                               }
+
+                           })
+
 
                         }
                     }
@@ -187,12 +195,13 @@ class Chat extends React.Component{
 
     }
 
-
     componentWillUnmount() {
-        const {dispatch} = this.props;
-        dispatch(exitChat())
-        history.push('/')
-        window.location.href = '/'
+       exitChat().then(res =>{
+            if(res.success) {
+                history.push('/')
+                window.location.href = '/'
+            }
+        })
     }
 
 

@@ -13,13 +13,20 @@ const history = createBrowserHistory();
 
 const InfoBar = ({ room }) => { //to display the room name dynamically, in chat.js we passed in the the InfoBar tag with room property with the room name
     const [exit, setExit] = useState(false);
-    const dispatch = useDispatch()
+
         useEffect( ()=>
         {
             if(exit === true) {
-              dispatch(exitChat())
-              history.push({path:'/'})
-              window.location.href = '/'
+              exitChat().then(res=>{
+                  if(res.success) {
+                      history.push({path: '/'})
+                      window.location.href = '/'
+                  }
+                  else{
+                      setExit(false)
+                  }
+              })
+
             }
         },[exit])
 
