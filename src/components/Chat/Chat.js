@@ -121,6 +121,9 @@ class Chat extends React.Component{
     componentWillUnmount() {
         const {dispatch} = this.props;
         dispatch(exitChat())
+        socket.on('disconnect', function() {
+            console.log('Got disconnect!');
+        });
     }
 
     componentDidUpdate(prevProps) {
@@ -128,23 +131,20 @@ class Chat extends React.Component{
             let answer = window.confirm(`This person match ${localStorage.getItem('percent')} , Do you want to continue?`)
             if (answer === true){
                 //yes
+
                     this.setState({accept:true, roomIsActive:true})
-
-                    if (localStorage.getItem('roomId') !== null) {
-
-                        history.push({
+                    history.push({
                             path: '/room',
                             search: `room=${localStorage.getItem('roomId')}&name=${localStorage.getItem('email')}`
                         })
 
-                        this.setState({name:localStorage.getItem('email'), room:localStorage.getItem('roomId')})
+                    this.setState({name:localStorage.getItem('email'), room:localStorage.getItem('roomId')})
 
-                        if (typeof(this.state.name) !== "undefined" && typeof (this.state.room) !== "undefined") {
+                    if (typeof(this.state.name) !== "undefined" && typeof (this.state.room) !== "undefined") {
                             socket.emit('join', { name:localStorage.getItem('email'),room:localStorage.getItem('roomId') })
-                        }
-                        else{
+                    }
+                    else{
                             alert("Something wrong, please refresh the page")
-                        }
                     }
                 //Check room is active
                 let id_roomActive = setInterval(
@@ -160,6 +160,8 @@ class Chat extends React.Component{
                         }
                     }
                     , 3000);
+
+
             }
             else if(answer === false){
                     const {dispatch} = this.props;
