@@ -104,11 +104,9 @@ class Chat extends React.Component{
                     if(response.success){
                         clearInterval(id)
                         this.setState({waiting:false})
+                        localStorage.setItem('roomId', response.msg)
+                        localStorage.setItem('percent', response.percent)
 
-                        if (localStorage.getItem('roomId') !== response.msg) {
-                            localStorage.setItem('roomId', response.msg)
-                            localStorage.setItem('percent', response.percent)
-                        }
                     }
                 }
                 , 3000);
@@ -135,6 +133,7 @@ class Chat extends React.Component{
                             path: '/room',
                             search: `room=${localStorage.getItem('roomId')}&name=${localStorage.getItem('email')}`
                         })
+
 
                     this.setState({name:localStorage.getItem('email'), room:localStorage.getItem('roomId')})
 
