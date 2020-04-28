@@ -25,8 +25,9 @@ const InfoBar = ({ room }) => { //to display the room name dynamically, in chat.
                   else{
                       setExit(false)
                   }
-              })
 
+
+              })
             }
         },[exit])
 
@@ -37,7 +38,7 @@ const InfoBar = ({ room }) => { //to display the room name dynamically, in chat.
                 <h3>{room}</h3>
             </div>
             <div className="rightInnerContainer">
-                <a href="/" onClick={() => {setExit(true)}}><img src={closeIcon} alt="close icon"/></a>
+                <a type="button" onClick={() => {setExit(true)}}><img src={closeIcon} alt="close icon"/></a>
             </div>
         </div>
     )
