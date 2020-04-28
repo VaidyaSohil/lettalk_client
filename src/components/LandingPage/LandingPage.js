@@ -10,6 +10,10 @@ const Welcome = ({onlineUser}) =>
     <div className={style.container} style={{backgroundImage: "url('https://media2.giphy.com/media/3oFyD4yCrbo29sDhZe/giphy.gif?cid=ecf05e47b9df28c9ca1e8b5911141043dd4a065ed363a598&rid=giphy.gif')",height:'100vh',backgroundRepeat: 'no-repeat',backgroundSize: 'cover'}}>
         <div className={style.centered}>
             <h1>Hi there</h1><br/><h2>We are building a next generation of deep conversation</h2><br/>
+            <h2>All your information and chat will be encrypted and will not be saved in our database</h2>
+            <h2>No Personal Information Leak, No worry someone will spook you online </h2>
+            <h2>Start checking out our member profile</h2>
+            <h2>Post cat picture will be nice</h2>
             <h2><img className="onlineIcon" src={onlineIcon} alt="online icon" />{onlineUser} amazing people are currently online</h2>
         </div>
     </div>

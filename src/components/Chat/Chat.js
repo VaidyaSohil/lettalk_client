@@ -45,7 +45,7 @@ async function checkRoomActive(){
 
 async function getAvailRoom() {
     console.log("Sending check room available")
-    const response = await fetch(`${env.REACT_APP_API_URL}/room?email=${localStorage.getItem('email')}&hobby=fisihing,jogging`, {
+    const response = await fetch(`${env.REACT_APP_API_URL}/room?email=${localStorage.getItem('email')}&hobby=${localStorage.getItem('hobby')}`, {
         method: 'GET',
         headers: {
             'Content-Type': 'application/json'
@@ -81,6 +81,30 @@ class Chat extends React.Component{
 
     componentWillMount(){
 
+        const env = runtimeEnv();
+        var data = {email:localStorage.getItem('email')}
+        console.log(`${env.REACT_APP_API_URL}/userProfile?email=${data.email}`)
+        console.log("email",data.email)
+        fetch(`${env.REACT_APP_API_URL}/userProfile?email=${data.email}`, {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            mode: 'cors'})
+            .then( (response) => {
+                if (!response.ok) {
+                    throw Error(response.statusText);
+                }
+                return response.json();
+            })
+            .then( (res) => {
+                localStorage.setItem('hobby',res.msg.hobby)
+            })
+            .catch( (e) => {
+                console.log(e) }
+            );
+
+        
     }
     componentDidMount() {
         console.log("component did mount")
