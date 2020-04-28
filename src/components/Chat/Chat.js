@@ -85,7 +85,6 @@ class Chat extends React.Component{
     componentDidMount() {
         console.log("component did mount")
         if(socket) {
-            console.log("Send message")
             socket.on('message', (message)=> { //listen for messages as 'message' is the key message in the backend
                 this.setState({messages: [...this.state.messages, message]})
             });
@@ -131,7 +130,6 @@ class Chat extends React.Component{
             let answer = window.confirm(`This person match ${localStorage.getItem('percent')} , Do you want to continue?`)
             if (answer === true){
                 //yes
-
                     this.setState({accept:true, roomIsActive:true})
                     history.push({
                             path: '/room',
@@ -154,12 +152,9 @@ class Chat extends React.Component{
                             console.log("clear interval")
                             this.setState({roomIsActive:false})
                             clearInterval(id_roomActive)
-                            if (localStorage.getItem('roomid') !== response.msg) {
-                                localStorage.setItem('roomId', response.msg)
-                            }
                         }
                     }
-                    , 3000);
+                    , 1500);
 
 
             }
@@ -168,8 +163,8 @@ class Chat extends React.Component{
                     dispatch(exitChat())
                     this.setState({waiting: true});
                     alert("Sorry, they quit, we will redirect you to the main page")
-                     history.push('/')
-                     window.location.href = window.location.href;
+                    history.push('/')
+                    window.location.href = '/'
 
             }
         }
@@ -180,7 +175,7 @@ class Chat extends React.Component{
             this.setState({waiting:true});
             alert("Sorry, they quit, we will redirect you to the main page")
             history.push('/')
-            window.location.href = window.location.href;
+            window.location.href = '/'
         }
 
 

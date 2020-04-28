@@ -18,9 +18,8 @@ const InfoBar = ({ room }) => { //to display the room name dynamically, in chat.
         {
             if(exit === true) {
               dispatch(exitChat())
-              localStorage.setItem('roomId', null)
               history.push({path:'/'})
-              window.location.href = window.location.href;
+              window.location.href = '/'
             }
         },[exit])
 
