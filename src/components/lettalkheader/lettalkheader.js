@@ -5,7 +5,6 @@ import {Link} from 'react-router-dom';
 import {submitLogout} from '../../action/signout'
 
 
-
 class LetTalkHeader extends Component {
     constructor(props) {
         super(props);
@@ -30,7 +29,12 @@ class LetTalkHeader extends Component {
                                          <NavItem > < Link to="/" onClick={this.handleLogout.bind(this)}>Logout</Link></NavItem>
                                       </div>
                                       )
-                                  : (<NavItem><Link to="/login">Login</Link></NavItem>)
+                                  : (
+                                      <div>
+                                          <NavItem><Link to="/login">Login</Link></NavItem>
+                                          <NavItem><Link to="/register">Register</Link></NavItem>
+                                      </div>
+                                      )
                               }
                           </Container>
                         </Nav>

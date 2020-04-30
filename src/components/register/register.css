@@ -1,0 +1,22 @@
+.register{
+    left:40%;
+    top:50%;
+    position: relative;
+    width:30vw;
+    height:50vh;
+}
+.box{
+    display: inline;
+    width: 10vw;
+    height:10vh;
+    border: 15px solid yellow;
+}
+.exitButton{
+    position: relative;
+    font-size: 5px;
+    top:0%;
+    right: 0;
+    width:10px;
+    height: 10px;
+    background-color: red;
+}

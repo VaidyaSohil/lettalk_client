@@ -6,6 +6,7 @@ import Sign_in from './components/GoogleSignIn/signin'
 import Landing_Page from './components/LandingPage/LandingPage'
 import LetTalkHeader from "./components/lettalkheader/lettalkheader";
 import Profile from './components/profile/profile'
+import Register from './components/register/register'
 import store from './stores/stores'
 import { Provider } from 'react-redux'
 import history from './history';
@@ -17,6 +18,7 @@ const App = () =>(
             <LetTalkHeader/>
             <Route path="/" exact component={Landing_Page}/>
             <Route path="/login" exact component={Sign_in}/>
+            <Route path="/register" exact component={Register}/>
             <Route path="/profile" exact component={Profile}/>
             <Route path="/chat" exact component={Chat}/>
         </Router>

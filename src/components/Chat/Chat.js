@@ -20,6 +20,12 @@ const env = runtimeEnv();
 const ENDPOINT = env.REACT_APP_API_URL;
 socket = io(ENDPOINT);  //io(url) where url needs to be the endpoint of the server
 
+
+const Advertise = () =>
+    <div>
+        <div>Want to get more transaction. Contact us for more information</div>
+        <img/>
+    </div>
 async function checkRoomActive(){
     console.log("Sending room active")
     const response = await fetch(`${env.REACT_APP_API_URL}/roomAvailable?roomId=${localStorage.getItem('roomId')}`, {
@@ -236,7 +242,14 @@ class Chat extends React.Component{
                             </div>
                             <TextContainer users={this.state.users}/>
                         </div>
-                    ): (<div>Please wait, we are matching you...</div>)
+                    ): (
+                        <div style={{height:"50vh"}}>
+                            <p>Please wait, we are matching you...</p>
+                            <div className="advertise">
+                              <Advertise/>
+                            </div>
+                        </div>
+                    )
                     )
                         : <div>Dude, you need to log in</div>
 

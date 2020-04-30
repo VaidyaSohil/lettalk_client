@@ -1,9 +1,10 @@
 import React, { useState } from "react";
 import {Col, Row} from 'react-bootstrap';
 import {connect} from "react-redux";
-import style from "./css.css"
+import style from "./Page.css"
 import runtimeEnv from "@mars/heroku-js-runtime-env";
 import onlineIcon from '../../Icons/onlineIcon.png';
+import SlideProfile from "../Slide/SlideProfile";
 
 const Welcome = ({onlineUser}) =>
 
@@ -60,7 +61,7 @@ class Landing_Page extends React.Component {
             <div>
             <Row className="text-center">
                 <Col>
-                    {this.props.username !== " " ? <h1>Hi {this.props.username} </h1> : <Welcome onlineUser={this.state.onlineUser}/>}
+                    {this.props.username !== " " ? <h1>Hi {this.props.username} </h1> : <SlideProfile/>}
                 </Col>
             </Row>
 

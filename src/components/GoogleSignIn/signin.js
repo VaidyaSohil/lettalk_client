@@ -6,7 +6,7 @@ import {submitLogin} from "../../action/signin";
 import {submitLogout} from "../../action/signout"
 import { connect } from 'react-redux'
 import Landing_Page from '../LandingPage/LandingPage'
-import style from "../LandingPage/css.css";
+import style from "../LandingPage/Page.css";
 
 class Sign_in extends React.Component {
     constructor(props) {
