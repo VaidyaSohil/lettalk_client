@@ -248,13 +248,9 @@ class Chat extends React.Component{
                     ): (
                         <div style={{height:"50vh"}}>
                             <p>Please wait, we are matching you...</p>
-<<<<<<< HEAD
-                            <div
-                                className="advertise"
-=======
+
                             <div 
-                                className="advertise" 
->>>>>>> cc4f14f9c52f4a66f6826d22bc1d863f3ea301d2
+                                className="advertise"
                                 style={{
                                     position: 'absolute', left: '50%', top: '50%',
                                     transform: 'translate(-50%, -50%)'
