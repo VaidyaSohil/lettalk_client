@@ -14,7 +14,6 @@ class Profile extends React.Component {
     componentDidMount() {
         const env = runtimeEnv();
         var data = {email:localStorage.getItem('email')}
-        console.log("email",data.email)
         return fetch(`${env.REACT_APP_API_URL}/userProfile?email=` + data.email, {
             method: 'GET',
             headers: {
@@ -48,7 +47,7 @@ class Profile extends React.Component {
 
     handleSubmit(e){
         e.preventDefault()
-        var data = {alias: this.state.alias,age:this.state.age ,hobby: this.state.hobby, interest: this.state.interest,gender:this.state.gender,
+        var data = { alias: this.state.alias,age:this.state.age ,hobby: this.state.hobby, interest: this.state.interest,gender:this.state.gender,
         picture:this.state.picture
             ,email: localStorage.getItem('email')
         }
@@ -90,6 +89,11 @@ class Profile extends React.Component {
             <div>
             { this.props.loggedIn ?
                     <Form>
+                        <Form.Group >
+                            <Form.Label >Email</Form.Label>
+                            <Form.Control name="email" value={ localStorage.getItem('email')} readonly="readonly"/>
+                        </Form.Group>
+
                         <Form.Group >
                             <Form.Label >Alias</Form.Label>
                             <Form.Control name="alias" value={this.state.alias}  onChange={this.handleChange.bind(this)}/>

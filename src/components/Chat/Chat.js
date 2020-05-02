@@ -207,6 +207,7 @@ class Chat extends React.Component{
                         }
 
                         else if(answer === false){
+                           clearInterval()
                            exitChat().then(res =>{
                                if(res.success){
                                    socket.emit('disconnect', () => {
@@ -230,12 +231,13 @@ class Chat extends React.Component{
     }
 
     componentWillUnmount() {
+       clearInterval()
        exitChat().then(res =>{
            try {
                if (res.success) {
                    console.log("Catch error here")
                    let answer = window.confirm(`Hey, you leave early, Do you want to rate them?`)
-                   if (answer) {
+                   if (answer && this.state.waiting === false) {
                        history.push('/rating')
                        window.location.href = '/rating'
                    } else {
@@ -248,7 +250,7 @@ class Chat extends React.Component{
                console.log("Catch error here")
                if (err) {
                    exitChat().then(res_catch => {
-                       if (res_catch.success) {
+                       if (res_catch.success && this.state.waiting === false) {
                            let answer = window.confirm(`Hey, you leave early,  Do you want to rate them?`)
                            if (answer) {
                                history.push('/rating')

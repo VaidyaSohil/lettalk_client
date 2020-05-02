@@ -23,8 +23,6 @@ export function getRating(){
 }
 export function rating(data){
     const env = runtimeEnv();
-    console.log(data)
-    alert("Call rating")
     return fetch(`${env.REACT_APP_API_URL}/rating`, {
         method: 'post',
         headers: {

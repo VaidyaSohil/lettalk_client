@@ -50,7 +50,8 @@ class Rating extends React.Component {
         let data = {author: localStorage.getItem('email'), match_person: localStorage.getItem('match_person'), rating:this.state.star, comment: this.state.text}
         rating(data).then( res=>{
             alert("Thank you for submit your feedback")
-
+            history.push('/')
+            window.location.href = '/'
         })
 
     }
