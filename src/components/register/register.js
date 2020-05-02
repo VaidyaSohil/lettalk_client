@@ -1,13 +1,8 @@
 import React, { Component} from 'react';
 import { connect } from 'react-redux';
-<<<<<<< HEAD
-import { Col, Form, FormGroup, FormControl, Button, ToggleButton, ToggleButtonGroup, ButtonGroup} from 'react-bootstrap';
-import {submitRegister} from "../../action/signin";
-import {checkValidEmail} from '../../action/register'
-=======
 import { Col, Form, FormGroup, FormControl, Button, ToggleButton, ToggleButtonGroup, ButtonGroup, Alert } from 'react-bootstrap';
-import {submitRegister,checkValidEmail} from "../../action/signin";
->>>>>>> cd74098113a6e89a62b7eeaf1956942bfe707c18
+import {submitRegister} from "../../action/signin";
+import {checkValidEmail} from "../../action/register"
 import './register.css'
 import runtimeEnv from "@mars/heroku-js-runtime-env";
 
@@ -87,13 +82,9 @@ class Step1 extends Component {
     handleChange(event){
         this.props.onChange(event)
     }
-<<<<<<< HEAD
 
-    toStep2(){
-=======
     toStep2() {
         var valid = true
->>>>>>> cd74098113a6e89a62b7eeaf1956942bfe707c18
         checkValidEmail(this.props.details.email).then( 
             // on fulfilled:
             () => {
