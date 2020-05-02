@@ -1,8 +1,13 @@
 import React, { Component} from 'react';
 import { connect } from 'react-redux';
+<<<<<<< HEAD
 import { Col, Form, FormGroup, FormControl, Button, ToggleButton, ToggleButtonGroup, ButtonGroup} from 'react-bootstrap';
 import {submitRegister} from "../../action/signin";
 import {checkValidEmail} from '../../action/register'
+=======
+import { Col, Form, FormGroup, FormControl, Button, ToggleButton, ToggleButtonGroup, ButtonGroup, Alert } from 'react-bootstrap';
+import {submitRegister,checkValidEmail} from "../../action/signin";
+>>>>>>> cd74098113a6e89a62b7eeaf1956942bfe707c18
 import './register.css'
 import runtimeEnv from "@mars/heroku-js-runtime-env";
 
@@ -63,29 +68,97 @@ class Step1 extends Component {
         this.handleChange = this.handleChange.bind(this)
         this.toStep2 = this.toStep2.bind(this)
         this.state = {
-            error_email: false
+            error_email: false,
+            error_invalid_name: false,
+            error_password: false
         }
+    }
+
+    validName(name) {
+        // Checks name length and tests against regular expression. Returns true if valid, false if otherwise.
+        var regName = /([a-zA-Z]{3,} {0,1}){1,3}$/;
+        console.log(regName.test(name))
+        if (!regName.test(name)) {
+            return false
+        }
+        return true
     }
 
     handleChange(event){
         this.props.onChange(event)
     }
+<<<<<<< HEAD
 
     toStep2(){
+=======
+    toStep2() {
+        var valid = true
+>>>>>>> cd74098113a6e89a62b7eeaf1956942bfe707c18
         checkValidEmail(this.props.details.email).then( 
-            () =>{
-                this.setState({error_email:false})
-                this.props.onContinue()
-            },
+            // on fulfilled:
             () => {
-                this.setState({error_email:true})
+                this.setState({error_email: true})
+            },
+
+            // on rejected:
+            () => {
+                this.setState({error_email: false})
+                valid = false
             }
         )
+        
+        if (!this.validName(this.props.details.name)){
+            this.setState({error_invalid_name: true})
+            valid = false
+        } else {
+            this.setState({error_invalid_name: false})
+        }
+
+        if( this.props.details.password1 === "" || this.props.details.password2 === ""){
+            this.setState({error_password: true})
+            valid = false
+        } else {
+            this.setState({error_password: false})
+        }
+
+        if (valid) {
+            this.setState({error_email:false})
+            this.setState({error_invalid_name:false})
+            this.props.onContinue()
+        }
     }
     render(){
         return(
             <div>
-                {this.state.error_email ? <div>Email is already exist</div>: ""}
+                {console.log(this.state)}
+                {/* Display error messages */}
+                {
+                    this.state.error_invalid_name
+                        ? <Col className="d-flex justify-content-center">
+                            <Alert variant="danger">
+                                Invalid name. Name must have more than two letters a-z.
+                            </Alert>
+                        </Col>
+                        : ""
+                }
+                {   
+                    this.state.error_email
+                        ?<Col className="d-flex justify-content-center">
+                            <Alert variant="danger">
+                                Invalid email
+                            </Alert>
+                        </Col>
+                        : ""
+                }
+                {
+                    this.state.error_password
+                        ?<Col className="d-flex justify-content-center">
+                            <Alert variant="danger">
+                                Passwords don't match
+                            </Alert>
+                        </Col>
+                        : ""
+                }
                 <Form className="register" horizontal>
                     <FormGroup controlId="name">
                         <Col  sm={2}>
@@ -357,24 +430,19 @@ class Register extends Component {
     }
 
     toStep2= () => {
-
-        if(this.state.details.name === ""){
-            this.setState({error_name:true})
-        }
-        else if(!re.test(this.state.details.email)){
+        if(!re.test(this.state.details.email)){
             this.setState({error_email:true})
         }
-        else if( this.state.details.password1 === "" || this.state.details.password2 === ""){
+        if( this.state.details.password1 === "" || this.state.details.password2 === ""){
             this.setState({error_password: true})
         }
-        else if(this.state.details.password1 === this.state.details.password2 ) {
+        if(this.state.details.password1 === this.state.details.password2 ) {
 
-            this.setState({step: 2,error_name:false,error_email:false,error_password:false}); //If there is no email associate with the current one
+            this.setState({error_password:false}); //If there is no email associate with the current one
         }
-        else{
-            alert("Some thing wrong, please come back")
+        if (!this.state.error_invalid_name && !this.state.error_password && !this.state.error_email){
+            this.setState({step: 2})
         }
-
     }
 
     toStep3= () =>{
@@ -425,10 +493,15 @@ class Register extends Component {
     render(){
         return (
             <div>
-                {this.state.error_name ? <div>Your name is invalid</div> : ""}
-                {this.state.error_email? <div>Your email is invalid</div>: ""}
-                {this.state.error_age? <div>Your age is invalid or Sorry kids, you still young, wait a bit longer</div>: ""}
-                {this.state.error_password? <div>Your password is not correct </div>: ""}
+                {
+                    this.state.error_age
+                        ?<Col className="d-flex justify-content-center">
+                                <Alert variant="danger">
+                                    Your age is invalid or Sorry kids, you still young, wait a bit longer
+                                </Alert>
+                            </Col>
+                        : ""
+                }
 
                 {this.renderSwitch(this.state.step)}
             </div>
