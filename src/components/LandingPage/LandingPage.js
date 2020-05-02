@@ -6,6 +6,8 @@ import runtimeEnv from "@mars/heroku-js-runtime-env";
 import onlineIcon from '../../Icons/onlineIcon.png';
 import SlideProfile from "../Slide/SlideProfile";
 import {createBrowserHistory} from "history";
+import {Button} from "react-bootstrap";
+
 const history = createBrowserHistory();
 
 
@@ -26,7 +28,7 @@ class Welcome extends  React.Component {
         return (
             <div>
                 <h2><img className="onlineIcon" src={onlineIcon} alt="online icon" />{this.props.onlineUser} amazing people are currently online</h2>
-                <button style={{backgroundColor:'green'}} onClick={this.onClick}>Let chat</button>
+                <Button variant="success"  onClick={this.onClick}>Let chat</Button>
             </div>
         )
     }

@@ -11,10 +11,8 @@ import Messages from '../Messages/Messages';
 import TextContainer from '../TextContainer/TextContainer';
 import runtimeEnv from "@mars/heroku-js-runtime-env";
 import {exitChat,getRating} from '../../action/chat'
-import Rating from '../rating/Rating'
 
-import {  Button } from 'react-bootstrap';
-import Modal from 'react-modal';
+
 
 import { connect } from 'react-redux';
 const history = createBrowserHistory();
@@ -269,7 +267,10 @@ class Chat extends React.Component{
 
 
     handleMessage(message){
-        this.setState({message: message})
+        var Filter = require('bad-words'),
+            filter = new Filter();
+
+        this.setState({message: filter.clean(message)})
     }
     //function for sending messages
     sendMessage (e){

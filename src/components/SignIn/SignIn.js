@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { submitLogin }  from "../../action/signin";
 import { connect } from 'react-redux';
-import { Col, Form, FormGroup, FormControl, Button } from 'react-bootstrap';
+import {Col, Form, FormGroup, FormControl, Button, Alert} from 'react-bootstrap';
 import GoogleSignIn from '../GoogleSignIn/signin'
 class Login extends Component {
 
@@ -39,7 +39,16 @@ class Login extends Component {
     render(){
         return (
             <div>
-                {this.state.error_password ? <div>Invalid email or password</div> : ""}
+                {
+                    this.state.error_password
+                        ? <Col className="d-flex justify-content-center">
+                            <Alert variant="danger">
+                                Invalid email or password
+                            </Alert>
+                        </Col>
+                        : ""
+                }
+
                 <Form style={{ margin: 'auto',left:'45%', position:'relative'}}>
                     <FormGroup controlId="email">
                         <Col sm={2}>

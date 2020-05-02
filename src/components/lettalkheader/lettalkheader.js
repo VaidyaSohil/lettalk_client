@@ -12,6 +12,15 @@ class LetTalkHeader extends Component {
     handleLogout(){
         const {dispatch} = this.props;
         dispatch(submitLogout())
+        localStorage.setItem('email',"")
+        localStorage.setItem('token',"")
+        localStorage.setItem('rating',"")
+        localStorage.setItem('match_person',"")
+        localStorage.setItem('roomId',"")
+        localStorage.setItem('alias',"")
+        localStorage.setItem('hobby',"")
+        localStorage.setItem('username',"")
+        localStorage.setItem('percent',"")
     }
 
     render() {
