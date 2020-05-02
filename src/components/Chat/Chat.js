@@ -159,6 +159,7 @@ class Chat extends React.Component{
                                 }
                             })
                             this.setState({accept:true, roomIsActive:true})
+
                             history.push({
                                 path: '/room',
                                 search: `room=${localStorage.getItem('roomId')}&name=${localStorage.getItem('alias')}`
@@ -210,15 +211,10 @@ class Chat extends React.Component{
                                if(res.success){
                                    socket.emit('disconnect', () => {
                                    })
-                                   let answer =  window.confirm(`This person quit,  Do you want to rate them?`)
-                                   if(answer){
-                                       history.push('/rating')
-                                       window.location.href = '/rating'
-                                   }
-                                   else{
+                                   alert(`We will redirect you back`)
+
                                        history.push('/')
                                        window.location.href = '/'
-                                   }
                                }
 
                            })
@@ -237,8 +233,8 @@ class Chat extends React.Component{
        exitChat().then(res =>{
            try {
                if (res.success) {
-
-                   let answer = window.confirm(`This person quit,  Do you want to rate them?`)
+                   console.log("Catch error here")
+                   let answer = window.confirm(`Hey, you leave early, Do you want to rate them?`)
                    if (answer) {
                        history.push('/rating')
                        window.location.href = '/rating'
@@ -248,36 +244,24 @@ class Chat extends React.Component{
                    }
                }
            }
-           catch(err){
-               exitChat().then(res_catch =>{
-                   if (res_catch.success) {
-                       let answer =  window.confirm(`This person quit,  Do you want to rate them?`)
-                       if(answer){
-                           history.push('/rating')
-                           window.location.href = '/'
+           catch(err) {
+               console.log("Catch error here")
+               if (err) {
+                   exitChat().then(res_catch => {
+                       if (res_catch.success) {
+                           let answer = window.confirm(`Hey, you leave early,  Do you want to rate them?`)
+                           if (answer) {
+                               history.push('/rating')
+                               window.location.href = '/rating'
+                           } else {
+                               history.push('/')
+                               window.location.href = '/'
+                           }
                        }
-                       else{
-                           history.push('/')
-                           window.location.href = '/'
-                       }
-                   }
-               })
+                   })
+               }
            }
-           finally{
-               exitChat().then(res_finally =>{
-                   if (res_finally.success) {
-                       let answer =  window.confirm(`This person quit,  Do you want to rate them?`)
-                       if(answer){
-                           history.push('/rating')
-                           window.location.href = '/rating'
-                       }
-                       else{
-                           history.push('/')
-                           window.location.href = '/'
-                       }
-                   }
-               })
-           }
+
         })
     }
 
