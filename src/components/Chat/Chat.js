@@ -10,7 +10,9 @@ import Input from '../Input/Input';
 import Messages from '../Messages/Messages';
 import TextContainer from '../TextContainer/TextContainer';
 import runtimeEnv from "@mars/heroku-js-runtime-env";
-import {exitChat} from '../../action/chat'
+import {exitChat,getRating} from '../../action/chat'
+import Rating from '../rating/Rating'
+
 import {  Button } from 'react-bootstrap';
 import Modal from 'react-modal';
 
@@ -24,14 +26,6 @@ const ENDPOINT = env.REACT_APP_API_URL;
 socket = io(ENDPOINT);  //io(url) where url needs to be the endpoint of the server
 
 
-
-const Popup = () =>
-    <div className='popup'>
-        <div className='popup\_inner'>
-
-            <button >close me</button>
-        </div>
-    </div>
 
 const Advertise = () =>
     <div>
@@ -153,11 +147,17 @@ class Chat extends React.Component{
                         this.setState({waiting:false})
                         localStorage.setItem('roomId', response.msg)
                         localStorage.setItem('percent', response.percent)
+                        localStorage.setItem('match_person', response.match_person)
 
                         let answer = window.confirm(`This person match ${localStorage.getItem('percent')} , Do you want to continue?`)
 
                         if (answer === true){
                             //yes
+                            getRating().then( res =>{
+                                if(res.success){
+                                    localStorage.setItem('rating',res.rating)
+                                }
+                            })
                             this.setState({accept:true, roomIsActive:true})
                             history.push({
                                 path: '/room',
@@ -185,9 +185,17 @@ class Chat extends React.Component{
                                             if (response.success) {
                                                 socket.emit('disconnect', () => {
                                                 })
-                                                alert("Sorry, they quit, we will redirect you to the main page")
-                                                history.push('/')
-                                                window.location.href = '/'
+                                                let answer =  window.confirm(`This person quit,  Do you want to rate them?`)
+                                                if(answer){
+                                                    history.push('/rating')
+                                                    window.location.href = '/rating'
+                                                }
+                                                else{
+                                                    history.push('/')
+                                                    window.location.href = '/'
+                                                }
+
+
                                             }
                                         })
                                     }
@@ -202,8 +210,15 @@ class Chat extends React.Component{
                                if(res.success){
                                    socket.emit('disconnect', () => {
                                    })
-                                   history.push('/')
-                                   window.location.href = '/'
+                                   let answer =  window.confirm(`This person quit,  Do you want to rate them?`)
+                                   if(answer){
+                                       history.push('/rating')
+                                       window.location.href = '/rating'
+                                   }
+                                   else{
+                                       history.push('/')
+                                       window.location.href = '/'
+                                   }
                                }
 
                            })
@@ -220,11 +235,49 @@ class Chat extends React.Component{
 
     componentWillUnmount() {
        exitChat().then(res =>{
-            if(res.success) {
-                //Send to another page to rate
-                history.push('/')
-                window.location.href = '/'
-            }
+           try {
+               if (res.success) {
+
+                   let answer = window.confirm(`This person quit,  Do you want to rate them?`)
+                   if (answer) {
+                       history.push('/rating')
+                       window.location.href = '/rating'
+                   } else {
+                       history.push('/')
+                       window.location.href = '/'
+                   }
+               }
+           }
+           catch(err){
+               exitChat().then(res_catch =>{
+                   if (res_catch.success) {
+                       let answer =  window.confirm(`This person quit,  Do you want to rate them?`)
+                       if(answer){
+                           history.push('/rating')
+                           window.location.href = '/'
+                       }
+                       else{
+                           history.push('/')
+                           window.location.href = '/'
+                       }
+                   }
+               })
+           }
+           finally{
+               exitChat().then(res_finally =>{
+                   if (res_finally.success) {
+                       let answer =  window.confirm(`This person quit,  Do you want to rate them?`)
+                       if(answer){
+                           history.push('/rating')
+                           window.location.href = '/rating'
+                       }
+                       else{
+                           history.push('/')
+                           window.location.href = '/'
+                       }
+                   }
+               })
+           }
         })
     }
 
@@ -275,7 +328,7 @@ class Chat extends React.Component{
                         </div>
                     )
                     )
-                        : <div><Popup/></div>
+                        : <div>Dude, you need to login</div>
 
                 }</div>
         )

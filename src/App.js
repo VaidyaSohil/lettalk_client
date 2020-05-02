@@ -7,9 +7,11 @@ import Landing_Page from './components/LandingPage/LandingPage'
 import LetTalkHeader from "./components/lettalkheader/lettalkheader";
 import Profile from './components/profile/profile'
 import Register from './components/register/register'
+import Popup from './components/rating/Rating'
 import store from './stores/stores'
 import { Provider } from 'react-redux'
 import history from './history';
+import Rating from "./components/rating/Rating";
 
 
 const App = () =>(
@@ -21,6 +23,8 @@ const App = () =>(
             <Route path="/register" exact component={Register}/>
             <Route path="/profile" exact component={Profile}/>
             <Route path="/chat" exact component={Chat}/>
+            <Route path="/rating" exact component={Rating}/>
+            <Route path="/testing" exact component={Rating}/>
         </Router>
     </Provider>
 )

@@ -1,7 +1,8 @@
 import React, { Component} from 'react';
 import { connect } from 'react-redux';
 import { Col, Form, FormGroup, FormControl, Button, ToggleButton, ToggleButtonGroup, ButtonGroup} from 'react-bootstrap';
-import {submitRegister,checkValidEmail} from "../../action/signin";
+import {submitRegister} from "../../action/signin";
+import {checkValidEmail} from '../../action/register'
 import './register.css'
 import runtimeEnv from "@mars/heroku-js-runtime-env";
 
@@ -69,6 +70,7 @@ class Step1 extends Component {
     handleChange(event){
         this.props.onChange(event)
     }
+
     toStep2(){
         checkValidEmail(this.props.details.email).then( 
             () =>{
@@ -177,7 +179,7 @@ class Step2 extends Component {
                     </Col>
                 </FormGroup>
 
-                <div style={{display:'flex'}}>
+                <div style={{display:'flex'}} >
                     <div className="radio">
                         <label>
                             <input type="radio"  value="Male" name="gender"/>
