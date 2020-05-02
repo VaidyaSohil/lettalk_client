@@ -14,7 +14,8 @@ class Login extends Component {
             details:{
                 email: '',
                 password: ''
-            }
+            },
+            error_password: false
         };
     }
 
@@ -29,37 +30,43 @@ class Login extends Component {
 
     login() {
         const {dispatch} = this.props;
-        dispatch(submitLogin(this.state.details));
+        dispatch(submitLogin(this.state.details))
+
+        this.setState({error_password: true})
+
     }
 
     render(){
         return (
-            <Form style={{ margin: 'auto',left:'45%', position:'relative'}}>
-                <FormGroup controlId="email">
-                    <Col sm={2}>
-                        Email
-                    </Col>
-                    <Col sm={2}>
-                        <FormControl onChange={this.updateDetails} value={this.state.details.username} type="email" placeholder="Email" />
-                    </Col>
-                </FormGroup>
+            <div>
+                {this.state.error_password ? <div>Invalid email or password</div> : ""}
+                <Form style={{ margin: 'auto',left:'45%', position:'relative'}}>
+                    <FormGroup controlId="email">
+                        <Col sm={2}>
+                            Email
+                        </Col>
+                        <Col sm={2}>
+                            <FormControl onChange={this.updateDetails} value={this.state.details.username} type="email" placeholder="Email" />
+                        </Col>
+                    </FormGroup>
 
-                <FormGroup controlId="password">
-                    <Col  sm={2}>
-                        Password
-                    </Col>
-                    <Col sm={2}>
-                        <FormControl onChange={this.updateDetails} value={this.state.details.password} type="password" placeholder="Password" />
-                    </Col>
-                </FormGroup>
+                    <FormGroup controlId="password">
+                        <Col  sm={2}>
+                            Password
+                        </Col>
+                        <Col sm={2}>
+                            <FormControl onChange={this.updateDetails} value={this.state.details.password} type="password" placeholder="Password" />
+                        </Col>
+                    </FormGroup>
 
-                <FormGroup>
-                    <Col smOffset={2} sm={10}>
-                        <Button onClick={this.login}>Sign in</Button>
-                    </Col>
-                </FormGroup>
-                {/* <GoogleSignIn/> */}
-            </Form>
+                    <FormGroup>
+                        <Col smOffset={2} sm={10}>
+                            <Button onClick={this.login}>Sign in</Button>
+                        </Col>
+                    </FormGroup>
+                    {/* <GoogleSignIn/> */}
+                </Form>
+            </div>
         )
     }
 }

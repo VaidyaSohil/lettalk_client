@@ -32,6 +32,7 @@ export function submitLogin(data){
             .then( (res) => {
                 localStorage.setItem('email', res.email);
                 localStorage.setItem('username', res.name);
+                localStorage.setItem('alias', res.alias);
                 localStorage.setItem('token', res.token);
                 dispatch(userLoggedIn(res.name));
                 history.push('/')
