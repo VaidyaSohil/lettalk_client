@@ -1,14 +1,14 @@
 import React, { Component} from 'react';
 //import { submitRegister } from '../actions/authActions';
 import { connect } from 'react-redux';
-import { Col, Form, FormGroup, FormControl, Button, ToggleButton, ToggleButtonGroup} from 'react-bootstrap';
+import { Col, Form, FormGroup, FormControl, Button, ToggleButton, ToggleButtonGroup, ButtonGroup} from 'react-bootstrap';
 import {submitRegister} from "../../action/signin";
 import './register.css'
 import runtimeEnv from "@mars/heroku-js-runtime-env";
 
 const env = runtimeEnv();
 
-const predefinedHobby = ["game","toy","chat","storytelling","crazymovie","photography","knitting","writing","gardening","dance","painting","sewing","drawing","hiking","cooking","scrapbooking"]
+const predefinedHobby = ["storytelling","photography","writing","scrapbooking"]
 class Step1 extends Component {
     constructor(props){
         super(props)
@@ -137,7 +137,14 @@ class Step3 extends Component {
         super(props)
         this.onSubmit = this.onSubmit.bind(this)
         this.comeBack = this.comeBack.bind(this)
-        this.handleClick = this.handleClick.bind(this)
+        this.handleAddHobby = this.handleAddHobby.bind(this)
+        this.handleRemoveHobby = this.handleRemoveHobby.bind(this)
+        this.updateDetails = this.updateDetails.bind(this)
+        this.state={
+            details: {
+                newHobby: ""
+            }
+        }
     }
 
     onSubmit(){
@@ -147,8 +154,22 @@ class Step3 extends Component {
         this.props.comeBack()
     }
 
-    handleClick(event){
-        this.props.onChange(event)
+    handleAddHobby() {
+        this.props.addHobby(this.state.details.newHobby)
+        this.setState( { details: { newHobby: "" } } )
+    }
+
+    handleRemoveHobby(hobby){
+        this.props.removeHobby(hobby)
+    }
+
+    updateDetails(event) {
+        let updateDetails = Object.assign({}, this.state.details);
+
+        updateDetails[event.target.id] = event.target.value;
+        this.setState({
+          details: updateDetails,
+        });
     }
 
     render(){
@@ -159,26 +180,29 @@ class Step3 extends Component {
                     <div>Hobby</div>
                 </div>
 
-                <FormGroup controlId="hobby">
+                <FormGroup>
                     <Col  sm={5}>
                         What do you like to do?
                     </Col>
                     <Col sm={10}>
-                    <ToggleButtonGroup type="checkbox" vertical="true" onChange={this.handleClick}>
-                        {predefinedHobby.map((item)=>{
-                            return <ToggleButton value={item}>{item}</ToggleButton>
-                            })}
-                    </ToggleButtonGroup>
-
+                        {this.props.details.hobby.map((item) => {
+                            return (
+                                <ButtonGroup className="extraPadding" key={item}>
+                                    <Button variant="outline-primary" disabled>{item}</Button>
+                                    <Button variant="danger" onClick={() => {
+                                        this.handleRemoveHobby(item)
+                                    }}>X</Button>
+                                </ButtonGroup>
+                            )
+                        })}
                     </Col>
                 </FormGroup>
-
-
-
+                <FormGroup controlId="newHobby">
+                    <Form.Control type="text" placeholder="Add an interest..." onChange={this.updateDetails} value={this.state.details.newHobby}/>
+                    <Button onClick={this.handleAddHobby}>Add</Button>
+                </FormGroup>
                 <Button onClick={this.comeBack}>Back</Button>
                 <Button onClick={this.onSubmit}>Register</Button>
-
-
             </Form>
         )
     }
@@ -194,10 +218,11 @@ class Register extends Component {
         this.updateDetails = this.updateDetails.bind(this);
         this.register = this.register.bind(this);
         this.comeBack = this.comeBack.bind(this)
-        this.updateHobby = this.updateHobby.bind(this)
+        this.addHobby = this.addHobby.bind(this)
+        this.removeHobby = this.removeHobby.bind(this)
 
         this.state = {
-            step: 1,
+            step: 3,
             details:{
                 name: '',
                 email: '',
@@ -205,7 +230,7 @@ class Register extends Component {
                 password2: '',
                 alias: '',
                 age: '',
-                hobby: []
+                hobby: predefinedHobby
             }
         };
     }
@@ -218,11 +243,22 @@ class Register extends Component {
         });
     }
 
-    updateHobby(event){
-        let updateDetails = Object.assign({}, this.state.details)
-        updateDetails["hobby"] = event
+    addHobby(hobby) {
+        let updateDetails = Object.assign({}, this.state.details);
+        hobby = hobby.toLowerCase()
+        if(updateDetails["hobby"].includes(hobby) === false){
+            updateDetails["hobby"].push(hobby)
+            this.setState({details: updateDetails})
+        }
+    }
+
+    removeHobby(hobby) {
+        let updateDetails = Object.assign({}, this.state.details);
+        const index = updateDetails.hobby.indexOf(hobby)
+        updateDetails["hobby"].splice(index, 1)
         this.setState({details: updateDetails})
     }
+
     comeBack = () =>{
         this.setState({step: this.state.step - 1})
     }
@@ -280,7 +316,7 @@ class Register extends Component {
             case 2:
                 return <Step2 details={this.state.details} onChange={this.updateDetails} onContinue={this.toStep3} comeBack={this.comeBack}/>
             case 3:
-                return <Step3 register={this.register} comeBack={this.comeBack}  details={this.state.details} onChange={this.updateHobby}/>
+                return <Step3 register={this.register} comeBack={this.comeBack}  details={this.state.details} addHobby={this.addHobby} removeHobby={this.removeHobby}/>
             default:
                 return <div>Something wrong, we are sending you back</div>
         }
