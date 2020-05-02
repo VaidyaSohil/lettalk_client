@@ -1,14 +1,13 @@
 import React, { Component} from 'react';
 import { connect } from 'react-redux';
-import { Col, Form, FormGroup, FormControl, Button, ToggleButton, ToggleButtonGroup } from 'react-bootstrap';
+import { Col, Form, FormGroup, FormControl, Button, ToggleButton, ToggleButtonGroup, ButtonGroup} from 'react-bootstrap';
 import {submitRegister,checkValidEmail} from "../../action/signin";
 import './register.css'
 import runtimeEnv from "@mars/heroku-js-runtime-env";
 
 const env = runtimeEnv();
 
-const predefinedHobby = ["game","toy","chat","storytelling","crazymovie","photography","knitting","writing","gardening","dance","painting","sewing","drawing","hiking","cooking","scrapbooking"]
-
+const predefinedHobby = ["storytelling","photography","writing","scrapbooking"]
 /*
 class SimpleReactFileUpload extends React.Component {
 
@@ -57,7 +56,6 @@ class SimpleReactFileUpload extends React.Component {
 }
 */
 
-
 class Step1 extends Component {
     constructor(props){
         super(props)
@@ -72,16 +70,15 @@ class Step1 extends Component {
         this.props.onChange(event)
     }
     toStep2(){
-        checkValidEmail(this.props.details.email).then( res =>{
-            if(res.success){
+        checkValidEmail(this.props.details.email).then( 
+            () =>{
                 this.setState({error_email:false})
                 this.props.onContinue()
-            }
-            else
-            {
+            },
+            () => {
                 this.setState({error_email:true})
             }
-        })
+        )
     }
     render(){
         return(
@@ -221,8 +218,14 @@ class Step3 extends Component {
         super(props)
         this.onSubmit = this.onSubmit.bind(this)
         this.comeBack = this.comeBack.bind(this)
-        this.handleClick = this.handleClick.bind(this)
-        this.handleRemove = this.handleRemove.bind(this)
+        this.handleAddHobby = this.handleAddHobby.bind(this)
+        this.handleRemoveHobby = this.handleRemoveHobby.bind(this)
+        this.updateDetails = this.updateDetails.bind(this)
+        this.state={
+            details: {
+                newHobby: ""
+            }
+        }
     }
 
     onSubmit(){
@@ -232,8 +235,22 @@ class Step3 extends Component {
         this.props.comeBack()
     }
 
-    handleClick(event){
-        this.props.onChange(event)
+    handleAddHobby() {
+        this.props.addHobby(this.state.details.newHobby)
+        this.setState( { details: { newHobby: "" } } )
+    }
+
+    handleRemoveHobby(hobby){
+        this.props.removeHobby(hobby)
+    }
+
+    updateDetails(event) {
+        let updateDetails = Object.assign({}, this.state.details);
+
+        updateDetails[event.target.id] = event.target.value;
+        this.setState({
+          details: updateDetails,
+        });
     }
     handleRemove(event){
         event.preventDefault()
@@ -247,22 +264,27 @@ class Step3 extends Component {
                     <div>Hobby</div>
                 </div>
 
-                <FormGroup controlId="hobby">
+                <FormGroup>
                     <Col  sm={5}>
                         What do you like to do?
                     </Col>
-
-                    <Col sm={10} style={{display:'flex'}}>
-                        <ToggleButtonGroup type="checkbox" vertical="true" onChange={this.handleClick}>
-                            {predefinedHobby.map((item)=>{
-                                return <ToggleButton value={item}>{item}</ToggleButton>
-                            })}
-                        </ToggleButtonGroup>
+                    <Col sm={10}>
+                        {this.props.details.hobby.map((item) => {
+                            return (
+                                <ButtonGroup className="extraPadding" key={item}>
+                                    <Button variant="outline-primary" disabled>{item}</Button>
+                                    <Button variant="danger" onClick={() => {
+                                        this.handleRemoveHobby(item)
+                                    }}>X</Button>
+                                </ButtonGroup>
+                            )
+                        })}
                     </Col>
                 </FormGroup>
-
-
-
+                <FormGroup controlId="newHobby">
+                    <Form.Control type="text" placeholder="Add an interest..." onChange={this.updateDetails} value={this.state.details.newHobby}/>
+                    <Button onClick={this.handleAddHobby}>Add</Button>
+                </FormGroup>
                 <Button onClick={this.comeBack}>Back</Button>
                 <Button style={{float:'right'}} onClick={this.onSubmit}>Register</Button>
 
@@ -282,8 +304,8 @@ class Register extends Component {
         this.updateDetails = this.updateDetails.bind(this);
         this.register = this.register.bind(this);
         this.comeBack = this.comeBack.bind(this)
-        this.updateHobby = this.updateHobby.bind(this)
-        this.onRemove    = this.onRemove.bind(this)
+        this.addHobby = this.addHobby.bind(this)
+        this.removeHobby = this.removeHobby.bind(this)
 
         this.state = {
             step: 1,
@@ -294,7 +316,7 @@ class Register extends Component {
                 password2: '',
                 alias: '',
                 age: '',
-                hobby: [],
+                hobby: predefinedHobby,
                 image: ""
             },
             error_name: false,
@@ -312,25 +334,20 @@ class Register extends Component {
         });
     }
 
-    updateHobby(event){
-
-
+    addHobby(hobby) {
         let updateDetails = Object.assign({}, this.state.details);
-        if(updateDetails["hobby"].includes(event.target.value) === false){
-            updateDetails["hobby"].push(event.target.value)
+        hobby = hobby.toLowerCase()
+        if(updateDetails["hobby"].includes(hobby) === false){
+            updateDetails["hobby"].push(hobby)
             this.setState({details: updateDetails})
         }
-
     }
 
-    onRemove(event){
+    removeHobby(hobby) {
         let updateDetails = Object.assign({}, this.state.details);
-        const index = updateDetails.hobby.indexOf(event.target.value);
-        if(index !== -1){
-            updateDetails.hobby.splice(index,1)
-            this.setState({details: updateDetails})
-        }
-
+        const index = updateDetails.hobby.indexOf(hobby)
+        updateDetails["hobby"].splice(index, 1)
+        this.setState({details: updateDetails})
     }
 
     comeBack = () =>{
@@ -396,7 +413,7 @@ class Register extends Component {
             case 2:
                 return <Step2 details={this.state.details} onChange={this.updateDetails} onContinue={this.toStep3} comeBack={this.comeBack}/>
             case 3:
-                return <Step3 register={this.register} comeBack={this.comeBack}  details={this.state.details} onChange={this.updateHobby} onRemove={this.onRemove}/>
+                return <Step3 register={this.register} comeBack={this.comeBack}  details={this.state.details} addHobby={this.addHobby} removeHobby={this.removeHobby}/>
             default:
                 return <div>Something wrong, we are sending you back</div>
         }
