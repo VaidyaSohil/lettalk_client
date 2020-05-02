@@ -7,7 +7,8 @@ export function exitChat(){
     return fetch(`${env.REACT_APP_API_URL}/room`, {
             method: 'delete',
             headers: {
-                'Content-Type': 'application/json'
+                'Content-Type': 'application/json',
+                'Authorization': localStorage.getItem('token')
             },
             body: JSON.stringify(data),
             mode: 'cors'

@@ -18,7 +18,8 @@ class Profile extends React.Component {
         return fetch(`${env.REACT_APP_API_URL}/userProfile?email=` + data.email, {
             method: 'GET',
             headers: {
-                'Content-Type': 'application/json'
+                'Content-Type': 'application/json',
+                'Authorization': localStorage.getItem('token')
             },
             mode: 'cors'})
             .then( (response) => {

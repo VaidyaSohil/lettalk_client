@@ -1,14 +1,63 @@
 import React, { Component} from 'react';
-//import { submitRegister } from '../actions/authActions';
 import { connect } from 'react-redux';
-import { Col, Form, FormGroup, FormControl, Button } from 'react-bootstrap';
-import {submitRegister} from "../../action/signin";
+import { Col, Form, FormGroup, FormControl, Button, ToggleButton, ToggleButtonGroup } from 'react-bootstrap';
+import {submitRegister,checkValidEmail} from "../../action/signin";
 import './register.css'
 import runtimeEnv from "@mars/heroku-js-runtime-env";
 
 const env = runtimeEnv();
 
 const predefinedHobby = ["game","toy","chat","storytelling","crazymovie","photography","knitting","writing","gardening","dance","painting","sewing","drawing","hiking","cooking","scrapbooking"]
+
+/*
+class SimpleReactFileUpload extends React.Component {
+
+    constructor(props) {
+        super(props);
+        this.state ={
+            file:null
+        }
+        this.onFormSubmit = this.onFormSubmit.bind(this)
+        this.onChange = this.onChange.bind(this)
+        this.fileUpload = this.fileUpload.bind(this)
+    }
+    onFormSubmit(e){
+        e.preventDefault() // Stop form submit
+        this.fileUpload(this.state.file).then((response)=>{
+            console.log(response.data);
+        })
+    }
+    onChange(e) {
+        this.setState({file:e.target.files[0]})
+    }
+    fileUpload(file){
+
+        const url = 'http://example.com/file-upload';
+        const formData = new FormData();
+        formData.append('file',file)
+        const config = {
+            headers: {
+                'content-type': 'multipart/form-data'
+            }
+        }
+        return  post(url, formData,config)
+
+
+    }
+
+    render() {
+        return (
+            <form onSubmit={this.onFormSubmit}>
+                <h1>File Upload</h1>
+                <input type="file" onChange={this.onChange} />
+                <button type="submit">Upload</button>
+            </form>
+        )
+    }
+}
+*/
+
+
 class Step1 extends Component {
     constructor(props){
         super(props)
@@ -20,7 +69,15 @@ class Step1 extends Component {
         this.props.onChange(event)
     }
     toStep2(){
-        this.props.onContinue()
+        checkValidEmail(this.props.details.email).then( res =>{
+            if(res.success){
+                this.props.onContinue()
+            }
+            else
+            {
+                alert("email is invalid")
+            }
+        })
     }
     render(){
         return(
@@ -66,7 +123,7 @@ class Step1 extends Component {
 
                     <FormGroup>
                     <Col smOffset={2} sm={10}>
-                       <Button onClick={this.toStep2}>Continue</Button>
+                       <Button style={{float:'right'}} onClick={this.toStep2}>Continue</Button>
                     </Col>
                     </FormGroup>
                 </Form>
@@ -119,11 +176,34 @@ class Step2 extends Component {
                     </Col>
                 </FormGroup>
 
+                <div style={{display:'flex'}}>
+                    <div className="radio">
+                        <label>
+                            <input type="radio"  value="Male" name="gender"/>
+                            Male
+                        </label>
+                    </div>
+                    <div className="radio">
+                        <label>
+                            <input type="radio" value="Female" name="gender"/>
+                            Female
+                        </label>
+                    </div>
+
+                    <div className="radio">
+                        <label>
+                            <input type="radio" value="Non-binary" name="gender" />
+                            Non-binary
+                        </label>
+                    </div>
+                </div>
+
+
 
                 <FormGroup>
                         <Col smOffset={2} sm={10}>
                             <Button onClick={this.comeBack}>Back</Button>
-                            <Button onClick={this.toStep3}>Continue</Button>
+                            <Button style={{float:'right'}} onClick={this.toStep3}>Continue</Button>
                         </Col>
                 </FormGroup>
                 </Form>
@@ -138,6 +218,7 @@ class Step3 extends Component {
         this.onSubmit = this.onSubmit.bind(this)
         this.comeBack = this.comeBack.bind(this)
         this.handleClick = this.handleClick.bind(this)
+        this.handleRemove = this.handleRemove.bind(this)
     }
 
     onSubmit(){
@@ -150,7 +231,10 @@ class Step3 extends Component {
     handleClick(event){
         this.props.onChange(event)
     }
-
+    handleRemove(event){
+        event.preventDefault()
+        this.props.onRemove(event)
+    }
     render(){
 
         return (
@@ -163,14 +247,12 @@ class Step3 extends Component {
                     <Col  sm={5}>
                         Select your hobby:
                     </Col>
-                    <Col sm={10}>
-                        {this.props.details.hobby.map((item,key)=>{
-                            return  <div className="box">
-                                        <div className="exitButton">Exit button</div>
-                                        <div>{item}</div>
-                                    </div>
-
+                    <Col sm={10} style={{display:'flex'}}>
+                        <ToggleButtonGroup type="checkbox" vertical="true" onChange={this.handleClick}>
+                            {predefinedHobby.map((item)=>{
+                                return <ToggleButton value={item}>{item}</ToggleButton>
                             })}
+                        </ToggleButtonGroup>
 
 
                     </Col>
@@ -183,7 +265,7 @@ class Step3 extends Component {
 
 
                 <Button onClick={this.comeBack}>Back</Button>
-                <Button onClick={this.onSubmit}>Register</Button>
+                <Button style={{float:'right'}} onClick={this.onSubmit}>Register</Button>
 
 
             </Form>
@@ -202,6 +284,7 @@ class Register extends Component {
         this.register = this.register.bind(this);
         this.comeBack = this.comeBack.bind(this)
         this.updateHobby = this.updateHobby.bind(this)
+        this.onRemove    = this.onRemove.bind(this)
 
         this.state = {
             step: 1,
@@ -212,7 +295,8 @@ class Register extends Component {
                 password2: '',
                 alias: '',
                 age: '',
-                hobby: []
+                hobby: [],
+                image: ""
             }
         };
     }
@@ -233,6 +317,15 @@ class Register extends Component {
             this.setState({details: updateDetails})
         }
 
+    }
+
+    onRemove(event){
+        let updateDetails = Object.assign({}, this.state.details);
+        const index = updateDetails.hobby.indexOf(event.target.value);
+        if(index !== -1){
+            updateDetails.hobby.splice(index,1)
+            this.setState({details: updateDetails})
+        }
 
     }
     comeBack = () =>{
@@ -240,7 +333,7 @@ class Register extends Component {
     }
 
     toStep2= () => {
-        /*
+
         console.log(this.state.details.password1,this.state.details.password2)
         if(this.state.details.name === ""){
             alert("You need a name")
@@ -257,17 +350,12 @@ class Register extends Component {
         else{
             alert("Some thing wrong, please come back")
         }
-        */
         //dispatch(submitRegister(this.state.details));
-        this.setState({step: 2}); //If there is no email associate with the current one
     }
 
     toStep3= () =>{
-        /*
-        if(this.state.details.alias === ""){
-            alert("please input your alias")
-        }
-        else if(this.state.details.age === ""){
+
+        if(this.state.details.age === ""){
             alert("Please input your age")
         }
         else if(parseInt(this.state.details.age) < 18){
@@ -277,12 +365,23 @@ class Register extends Component {
             this.setState({step: 3})
         }
 
-         */
-        this.setState({step: 3})
     }
 
+
     register(){
-        alert("Hit register")
+
+        const {dispatch} = this.props;
+        let data = {
+            email: this.state.details.email,
+            password: this.state.details.password1,
+            alias: this.state.details.alias,
+            age:  this.state.details.age,
+            hobby: this.state.details.hobby,
+            gender: this.state.details.gender,
+            picture: this.state.details.picture,
+            name: this.state.details.name
+        }
+        dispatch(submitRegister(data))
     }
 
     renderSwitch(param) {
@@ -292,7 +391,7 @@ class Register extends Component {
             case 2:
                 return <Step2 details={this.state.details} onChange={this.updateDetails} onContinue={this.toStep3} comeBack={this.comeBack}/>
             case 3:
-                return <Step3 register={this.register} comeBack={this.comeBack}  details={this.state.details} onChange={this.updateHobby}/>
+                return <Step3 register={this.register} comeBack={this.comeBack}  details={this.state.details} onChange={this.updateHobby} onRemove={this.onRemove}/>
             default:
                 return <div>Something wrong, we are sending you back</div>
         }

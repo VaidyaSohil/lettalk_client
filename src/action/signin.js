@@ -1,5 +1,7 @@
 import actionTypes from '../constants/actionType';
 import runtimeEnv from "@mars/heroku-js-runtime-env";
+import {createBrowserHistory} from "history";
+const history = createBrowserHistory();
 const env = runtimeEnv();
 
 function userLoggedIn(username){
@@ -11,15 +13,9 @@ function userLoggedIn(username){
 }
 
 export function submitLogin(data){
-    return dispatch => {
-        dispatch(userLoggedIn(data.username));
-    }
-}
-
-export function submitRegister(data){
     const env = runtimeEnv();
     return dispatch => {
-        return fetch(`${env.REACT_APP_API_URL}/signup`, {
+        return fetch(`${env.REACT_APP_API_URL}/login`, {
             method: 'POST',
             headers: {
                 'Accept': 'application/json',
@@ -34,9 +30,63 @@ export function submitRegister(data){
                 return response.json();
             })
             .then( (res) => {
-
-                dispatch(submitLogin(data));
+                localStorage.setItem('email', res.email);
+                localStorage.setItem('username', res.name);
+                localStorage.setItem('token', res.token);
+                dispatch(userLoggedIn(res.name));
+                history.push('/')
+                window.location.href = '/'
             })
             .catch( (e) => console.log(e) );
     }
+}
+
+export function submitRegister(data){
+    const env = runtimeEnv();
+    console.log(data)
+    return dispatch => {
+        return fetch(`${env.REACT_APP_API_URL}/register`, {
+            method: 'POST',
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(data),
+            mode: 'cors'})
+            .then( (response) => {
+                if (!response.ok) {
+                    throw Error(response.statusText);
+                }
+                return response.json();
+            })
+            .then( (res) => {
+                if(res.success) {
+                    dispatch(submitLogin(data));
+                }
+                else{
+                    alert("Your email or password is invalid")
+                }
+            })
+            .catch( (e) => console.log(e) );
+    }
+}
+
+export function checkValidEmail(email){
+    //Check if email is valid first
+    const env = runtimeEnv();
+    return fetch(`${env.REACT_APP_API_URL}/checkValidEmail?email=${email}`, {
+        method: 'get',
+        headers: {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json'
+        },
+        mode: 'cors'})
+        .then( (response) => {
+            if (!response.ok) {
+                throw Error(response.statusText);
+            }
+            return response.json();
+        })
+        .catch( (e) => console.log(e) );
+
 }

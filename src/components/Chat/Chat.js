@@ -31,7 +31,8 @@ async function checkRoomActive(){
     const response = await fetch(`${env.REACT_APP_API_URL}/roomAvailable?roomId=${localStorage.getItem('roomId')}`, {
         method: 'GET',
         headers: {
-            'Content-Type': 'application/json'
+            'Content-Type': 'application/json',
+            'Authorization': localStorage.getItem('token')
         },
         mode: 'cors'
     })
@@ -54,7 +55,8 @@ async function getAvailRoom() {
     const response = await fetch(`${env.REACT_APP_API_URL}/room?email=${localStorage.getItem('email')}&hobby=${localStorage.getItem('hobby')}`, {
         method: 'GET',
         headers: {
-            'Content-Type': 'application/json'
+            'Content-Type': 'application/json',
+            'Authorization': localStorage.getItem('token')
         },
         mode: 'cors'
     })
@@ -94,7 +96,8 @@ class Chat extends React.Component{
         fetch(`${env.REACT_APP_API_URL}/userProfile?email=${data.email}`, {
             method: 'GET',
             headers: {
-                'Content-Type': 'application/json'
+                'Content-Type': 'application/json',
+                'Authorization': localStorage.getItem('token')
             },
             mode: 'cors'})
             .then( (response) => {
@@ -245,7 +248,12 @@ class Chat extends React.Component{
                     ): (
                         <div style={{height:"50vh"}}>
                             <p>Please wait, we are matching you...</p>
-                            <div className="advertise">
+                            <div
+                                className="advertise"
+                                style={{
+                                    position: 'absolute', left: '50%', top: '50%',
+                                    transform: 'translate(-50%, -50%)'
+                                }}>
                               <Advertise/>
                             </div>
                         </div>
