@@ -63,6 +63,9 @@ class Step1 extends Component {
         super(props)
         this.handleChange = this.handleChange.bind(this)
         this.toStep2 = this.toStep2.bind(this)
+        this.state = {
+            error_email: false
+        }
     }
 
     handleChange(event){
@@ -71,19 +74,20 @@ class Step1 extends Component {
     toStep2(){
         checkValidEmail(this.props.details.email).then( res =>{
             if(res.success){
+                this.setState({error_email:false})
                 this.props.onContinue()
             }
             else
             {
-                alert("email is invalid")
+                this.setState({error_email:true})
             }
         })
     }
     render(){
         return(
             <div>
+                {this.state.error_email ? <div>Email is already exist</div>: ""}
                 <Form className="register" horizontal>
-
                     <FormGroup controlId="name">
                         <Col  sm={2}>
                         Name
@@ -292,7 +296,11 @@ class Register extends Component {
                 age: '',
                 hobby: [],
                 image: ""
-            }
+            },
+            error_name: false,
+            error_password: false,
+            error_age: false,
+            error_email: false
         };
     }
 
@@ -331,35 +339,35 @@ class Register extends Component {
 
     toStep2= () => {
 
-        console.log(this.state.details.password1,this.state.details.password2)
         if(this.state.details.name === ""){
-            alert("You need a name")
+            this.setState({error_name:true})
         }
         else if(!re.test(this.state.details.email)){
-            alert("Sorry, your email is not valid, please input again")
+            this.setState({error_email:true})
         }
         else if( this.state.details.password1 === "" || this.state.details.password2 === ""){
-            alert("Sorry, your password doesn't match, please input again")
+            this.setState({error_password: true})
         }
         else if(this.state.details.password1 === this.state.details.password2 ) {
-            this.setState({step: 2}); //If there is no email associate with the current one
+
+            this.setState({step: 2,error_name:false,error_email:false,error_password:false}); //If there is no email associate with the current one
         }
         else{
             alert("Some thing wrong, please come back")
         }
-        //dispatch(submitRegister(this.state.details));
+
     }
 
     toStep3= () =>{
 
         if(this.state.details.age === ""){
-            alert("Please input your age")
+            this.setState({error_age:true})
         }
         else if(parseInt(this.state.details.age) < 18){
-            alert("Sorry kids, you still young, wait a bit longer")
+            this.setState({error_age:true})
         }
         else {
-            this.setState({step: 3})
+            this.setState({step: 3,error_age:false})
         }
 
     }
@@ -398,6 +406,11 @@ class Register extends Component {
     render(){
         return (
             <div>
+                {this.state.error_name ? <div>Your name is invalid</div> : ""}
+                {this.state.error_email? <div>Your email is invalid</div>: ""}
+                {this.state.error_age? <div>Your age is invalid or Sorry kids, you still young, wait a bit longer</div>: ""}
+                {this.state.error_password? <div>Your password is not correct </div>: ""}
+
                 {this.renderSwitch(this.state.step)}
             </div>
         )
