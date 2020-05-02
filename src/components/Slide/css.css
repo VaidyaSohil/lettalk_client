@@ -1,0 +1,26 @@
+.slideProfile{
+    height: 50vh;
+    width: 50vw;
+    position: relative;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    border-style: double
+}
+.imgProfile{
+    height:50vh;
+    width:30vw;
+}
+.captionText{
+    text-shadow: 1px 1px black;
+}
+@media only screen and (max-width: 600px) {
+    .slideProfile{
+        height: 20vh;
+        width: 50vw;
+    }
+    .imgProfile{
+        height:20vh;
+        width:30vw;
+    }
+}
