@@ -30,9 +30,9 @@ class LetTalkHeader extends Component {
                                       </div>
                                       )
                                   : (
-                                      <div>
+                                      <div style={{display:'flex'}}>
                                           <NavItem><Link to="/login">Login</Link></NavItem>
-                                          <NavItem><Link to="/register">Register</Link></NavItem>
+                                          <NavItem><Link style={{margin:'10px 10px 10px 10px', padding:'10px 10px 10px 10px',position:'relative',right:'10px'}} to="/register">Register</Link></NavItem>
                                       </div>
                                       )
                               }

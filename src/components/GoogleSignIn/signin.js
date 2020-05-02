@@ -20,6 +20,8 @@ class Sign_in extends React.Component {
         if(response.profileObj.email !== "") {
             var data = {username:response.profileObj.email}
             localStorage.setItem('email', response.profileObj.email)
+            //Sign in with google?
+            //Stop it for now
             localStorage.setItem('token',response.tokenId)
 
             dispatch(submitLogin(data))

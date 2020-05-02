@@ -11,6 +11,9 @@ import Messages from '../Messages/Messages';
 import TextContainer from '../TextContainer/TextContainer';
 import runtimeEnv from "@mars/heroku-js-runtime-env";
 import {exitChat} from '../../action/chat'
+import {  Button } from 'react-bootstrap';
+import Modal from 'react-modal';
+
 import { connect } from 'react-redux';
 const history = createBrowserHistory();
 
@@ -21,17 +24,29 @@ const ENDPOINT = env.REACT_APP_API_URL;
 socket = io(ENDPOINT);  //io(url) where url needs to be the endpoint of the server
 
 
+
+const Popup = () =>
+    <div className='popup'>
+        <div className='popup\_inner'>
+
+            <button >close me</button>
+        </div>
+    </div>
+
 const Advertise = () =>
     <div>
         <div>Want to get more transaction. Contact us for more information</div>
         <img/>
     </div>
+
+
 async function checkRoomActive(){
     console.log("Sending room active")
     const response = await fetch(`${env.REACT_APP_API_URL}/roomAvailable?roomId=${localStorage.getItem('roomId')}`, {
         method: 'GET',
         headers: {
-            'Content-Type': 'application/json'
+            'Content-Type': 'application/json',
+            'Authorization': localStorage.getItem('token')
         },
         mode: 'cors'
     })
@@ -54,7 +69,8 @@ async function getAvailRoom() {
     const response = await fetch(`${env.REACT_APP_API_URL}/room?email=${localStorage.getItem('email')}&hobby=${localStorage.getItem('hobby')}`, {
         method: 'GET',
         headers: {
-            'Content-Type': 'application/json'
+            'Content-Type': 'application/json',
+            'Authorization': localStorage.getItem('token')
         },
         mode: 'cors'
     })
@@ -94,7 +110,8 @@ class Chat extends React.Component{
         fetch(`${env.REACT_APP_API_URL}/userProfile?email=${data.email}`, {
             method: 'GET',
             headers: {
-                'Content-Type': 'application/json'
+                'Content-Type': 'application/json',
+                'Authorization': localStorage.getItem('token')
             },
             mode: 'cors'})
             .then( (response) => {
@@ -144,11 +161,11 @@ class Chat extends React.Component{
                             this.setState({accept:true, roomIsActive:true})
                             history.push({
                                 path: '/room',
-                                search: `room=${localStorage.getItem('roomId')}&name=${localStorage.getItem('email')}`
+                                search: `room=${localStorage.getItem('roomId')}&name=${localStorage.getItem('alias')}`
                             })
 
 
-                            this.setState({name:localStorage.getItem('email'), room:localStorage.getItem('roomId')})
+                            this.setState({name:localStorage.getItem('alias'), room:localStorage.getItem('roomId')})
 
                             if (typeof(this.state.name) !== "undefined" && typeof (this.state.room) !== "undefined") {
                                 console.log("Join name and room",this.state.name,this.state.room)
@@ -204,6 +221,7 @@ class Chat extends React.Component{
     componentWillUnmount() {
        exitChat().then(res =>{
             if(res.success) {
+                //Send to another page to rate
                 history.push('/')
                 window.location.href = '/'
             }
@@ -245,8 +263,9 @@ class Chat extends React.Component{
                     ): (
                         <div style={{height:"50vh"}}>
                             <p>Please wait, we are matching you...</p>
+
                             <div 
-                                className="advertise" 
+                                className="advertise"
                                 style={{
                                     position: 'absolute', left: '50%', top: '50%',
                                     transform: 'translate(-50%, -50%)'
@@ -256,7 +275,7 @@ class Chat extends React.Component{
                         </div>
                     )
                     )
-                        : <div>Dude, you need to log in</div>
+                        : <div><Popup/></div>
 
                 }</div>
         )

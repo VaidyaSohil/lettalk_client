@@ -5,20 +5,32 @@ import style from "./Page.css"
 import runtimeEnv from "@mars/heroku-js-runtime-env";
 import onlineIcon from '../../Icons/onlineIcon.png';
 import SlideProfile from "../Slide/SlideProfile";
+import {createBrowserHistory} from "history";
+const history = createBrowserHistory();
 
-const Welcome = ({onlineUser}) =>
 
-    <div className={style.container} style={{backgroundImage: "url('https://media2.giphy.com/media/3oFyD4yCrbo29sDhZe/giphy.gif?cid=ecf05e47b9df28c9ca1e8b5911141043dd4a065ed363a598&rid=giphy.gif')",height:'100vh',backgroundRepeat: 'no-repeat',backgroundSize: 'cover'}}>
-        <div className={style.centered}>
-            <h1>Hi there</h1><br/><h2>We are building a next generation of deep conversation</h2><br/>
-            <h2>All your information and chat will be encrypted and will not be saved in our database</h2>
-            <h2>No Personal Information Leak, No worry someone will spook you online </h2>
-            <h2>Start checking out our member profile</h2>
-            <h2>Post cat picture will be nice</h2>
-            <h2><img className="onlineIcon" src={onlineIcon} alt="online icon" />{onlineUser} amazing people are currently online</h2>
-        </div>
-    </div>
 
+class Welcome extends  React.Component {
+    constructor(props) {
+        super(props);
+        this.onClick = this.onClick.bind(this)
+    }
+
+    onClick(){
+            //Dispatch to main page
+            //Dispatch to login or register
+        history.push('/login')
+        window.location.href = '/login'
+    }
+    render() {
+        return (
+            <div>
+                <h2><img className="onlineIcon" src={onlineIcon} alt="online icon" />{this.props.onlineUser} amazing people are currently online</h2>
+                <button style={{backgroundColor:'green'}} onClick={this.onClick}>Let chat</button>
+            </div>
+        )
+    }
+}
 
 class Landing_Page extends React.Component {
     constructor(props) {
@@ -29,7 +41,6 @@ class Landing_Page extends React.Component {
 
     componentDidMount() {
         const env = runtimeEnv();
-
         fetch(`${env.REACT_APP_API_URL}/online`, {
             method: 'get',
             headers: {
@@ -61,7 +72,13 @@ class Landing_Page extends React.Component {
             <div>
             <Row className="text-center">
                 <Col>
-                    {this.props.username !== " " ? <h1>Hi {this.props.username} </h1> : <SlideProfile/>}
+                    {(this.props.username) === " "  ?
+                        <Welcome onlineUser={this.state.onlineUser}/> :
+                        <div>
+                            <h1>Hi {this.props.username} </h1>
+                            <SlideProfile/>
+                        </div>
+                    }
                 </Col>
             </Row>
 
