@@ -1,7 +1,7 @@
 import React, { Component} from 'react';
 //import { submitRegister } from '../actions/authActions';
 import { connect } from 'react-redux';
-import { Col, Form, FormGroup, FormControl, Button } from 'react-bootstrap';
+import { Col, Form, FormGroup, FormControl, Button, ToggleButton, ToggleButtonGroup} from 'react-bootstrap';
 import {submitRegister} from "../../action/signin";
 import './register.css'
 import runtimeEnv from "@mars/heroku-js-runtime-env";
@@ -161,24 +161,17 @@ class Step3 extends Component {
 
                 <FormGroup controlId="hobby">
                     <Col  sm={5}>
-                        Select your hobby:
+                        What do you like to do?
                     </Col>
                     <Col sm={10}>
-                        {this.props.details.hobby.map((item,key)=>{
-                            return  <div className="box">
-                                        <div className="exitButton">Exit button</div>
-                                        <div>{item}</div>
-                                    </div>
-
+                    <ToggleButtonGroup type="checkbox" vertical="true" onChange={this.handleClick}>
+                        {predefinedHobby.map((item)=>{
+                            return <ToggleButton value={item}>{item}</ToggleButton>
                             })}
-
+                    </ToggleButtonGroup>
 
                     </Col>
                 </FormGroup>
-
-                {predefinedHobby.map((item,key) =>{
-                    return <button type="button" onClick={this.handleClick} value={item} key={key}>{item}</button>
-                })}
 
 
 
@@ -226,14 +219,9 @@ class Register extends Component {
     }
 
     updateHobby(event){
-
-        let updateDetails = Object.assign({}, this.state.details);
-        if(updateDetails["hobby"].includes(event.target.value) === false){
-            updateDetails["hobby"].push(event.target.value)
-            this.setState({details: updateDetails})
-        }
-
-
+        let updateDetails = Object.assign({}, this.state.details)
+        updateDetails["hobby"] = event
+        this.setState({details: updateDetails})
     }
     comeBack = () =>{
         this.setState({step: this.state.step - 1})
