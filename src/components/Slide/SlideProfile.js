@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import {Col, Row} from 'react-bootstrap';
+import {Col, Row, Carousel, Image} from 'react-bootstrap';
 import {connect} from "react-redux";
 import style from "./css.css"
 
@@ -21,47 +21,27 @@ let image = [
             ]
 
 class SlideProfile extends React.Component {
-    constructor(props) {
-        super(props);
-        this.handleClick= this.handleClick.bind(this)
-        this.myInput = React.createRef()
-        this.state = ({index:0})
-    }
     componentDidMount() {
 
     }
 
-    handleClick(e){
-        e.preventDefault()
-        let outerElement = (window.innerWidth) /2
-        if(e.clientX < outerElement){
-            if(this.state.index >= 1) {
-                this.setState({index: this.state.index - 1})
-            }
-            else{
-                this.setState({index: image.length - 1})
-            }
-        }
-        else if(e.clientX > outerElement){
-            if(this.state.index < image.length -1) {
-                this.setState({index: this.state.index + 1})
-            }
-            else{
-                this.setState({index: 0})
-            }
-        }
-    }
     render() {
         return (
-            <div className="slideProfile"
-                ref={this.myInput}
-                onClick = {this.handleClick}
-            >
-                <img className='imgProfile' src= {`${image[this.state.index].src}`} alt="Namehere"/>
-                <p>Name: {`${image[this.state.index].name}`}</p>
-                <p>Description: {`${image[this.state.index].description}`}</p>
-            </div>
-
+            <Carousel>
+                {
+                    image.map((item) => {
+                        return (
+                            <Carousel.Item>
+                                <Image src={item.src} rounded className="imgProfile"/>
+                                <Carousel.Caption>
+                                    <h3 className="captionText">{item.name}</h3>
+                                    <p className="captionText">{item.description}</p>
+                                </Carousel.Caption>
+                            </Carousel.Item>
+                        )}
+                    )
+                }
+            </Carousel>
         )
     }
 }
