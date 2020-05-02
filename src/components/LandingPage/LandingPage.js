@@ -61,7 +61,12 @@ class Landing_Page extends React.Component {
             <div>
             <Row className="text-center">
                 <Col>
-                    {this.props.username !== " " ? <h1>Hi {this.props.username} </h1> : <SlideProfile/>}
+                    {this.props.username !== " " ?
+                        <div>
+                            <h1>Hi {this.props.username} </h1>
+                            <SlideProfile/>
+                        </div>
+                        :<Welcome/>}
                 </Col>
             </Row>
 

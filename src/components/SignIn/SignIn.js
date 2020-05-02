@@ -34,12 +34,12 @@ class Login extends Component {
 
     render(){
         return (
-            <Form horizontal alignItems="center">
+            <Form style={{ margin: 'auto',left:'45%', position:'relative'}}>
                 <FormGroup controlId="email">
                     <Col sm={2}>
                         Email
                     </Col>
-                    <Col sm={3}>
+                    <Col sm={2}>
                         <FormControl onChange={this.updateDetails} value={this.state.details.username} type="email" placeholder="Email" />
                     </Col>
                 </FormGroup>
@@ -48,7 +48,7 @@ class Login extends Component {
                     <Col  sm={2}>
                         Password
                     </Col>
-                    <Col sm={3}>
+                    <Col sm={2}>
                         <FormControl onChange={this.updateDetails} value={this.state.details.password} type="password" placeholder="Password" />
                     </Col>
                 </FormGroup>

@@ -34,7 +34,6 @@ class Profile extends React.Component {
                         alias:userProfile.alias,
                         age:userProfile.age,
                         hobby:userProfile.hobby,
-                        interest:userProfile.interest,
                         gender: userProfile.gender,
                         picture: userProfile.picture
                 }
@@ -58,7 +57,8 @@ class Profile extends React.Component {
         return fetch(`${env.REACT_APP_API_URL}/userProfile`, {
                     method: 'POST',
                     headers: {
-                        'Content-Type': 'application/json'
+                        'Content-Type': 'application/json',
+                        'Authorization': localStorage.getItem('token')
                     },
                     body: JSON.stringify(data),
                     mode: 'cors'})
@@ -102,11 +102,6 @@ class Profile extends React.Component {
                             <Form.Label>hobby</Form.Label>
                             <Form.Control name="hobby" value={this.state.hobby} onChange={this.handleChange.bind(this)}/>
                         </Form.Group>
-                        <Form.Group >
-                            <Form.Label>interest</Form.Label>
-                            <Form.Control name="interest" value={this.state.interest} onChange={this.handleChange.bind(this)}/>
-                        </Form.Group>
-
                         <Form.Group >
                             <Form.Label>gender</Form.Label>
                             <Form.Control name="gender" value={this.state.gender} onChange={this.handleChange.bind(this)}/>
