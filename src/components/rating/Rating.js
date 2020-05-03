@@ -2,7 +2,7 @@ import React from "react";
 import './rating.css'
 import {Col, Form, FormControl, FormGroup} from "react-bootstrap";
 import {FiStar} from 'react-icons/fi';
-import {rating} from "../../action/chat"
+import {exitChat, rating} from "../../action/chat"
 import {createBrowserHistory} from "history";
 const history = createBrowserHistory();
 
@@ -46,6 +46,7 @@ class Rating extends React.Component {
 
     onSubmit(event){
         event.preventDefault()
+        exitChat()
         //Dispatch to
         let data = {author: localStorage.getItem('email'), match_person: localStorage.getItem('match_person'), rating:this.state.star, comment: this.state.text}
         rating(data).then( res=>{
@@ -56,6 +57,7 @@ class Rating extends React.Component {
 
     }
     componentWillUnmount() {
+        exitChat()
         history.push('/')
         window.location.href = '/'
     }

@@ -47,7 +47,7 @@ export function rating(data){
 
 export function exitChat(){
     const env = runtimeEnv();
-    let data = {'roomId': localStorage.getItem('roomId')}
+    let data = {'roomId': localStorage.getItem('roomId'),'email': localStorage.getItem('email')}
     return fetch(`${env.REACT_APP_API_URL}/room`, {
             method: 'delete',
             headers: {

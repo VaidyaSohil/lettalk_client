@@ -1,5 +1,5 @@
 // Chat.js for the chat page
-import React, {useState, useEffect, Component} from 'react';   //react builtin hooks - useState/useEffect
+import React from 'react';   //react builtin hooks - useState/useEffect
 import { useHistory } from "react-router-dom";
 import queryString from 'query-string';
 import io from 'socket.io-client';
@@ -247,8 +247,9 @@ class Chat extends React.Component{
            catch(err) {
                console.log("Catch error here")
                if (err) {
-                   exitChat().then(res_catch => {
-                       if (res_catch.success && this.state.waiting === false) {
+                   exitChat().then(res => {
+                       alert(res)
+                       if (res.success && this.state.waiting === false) {
                            let answer = window.confirm(`Hey, you leave early,  Do you want to rate them?`)
                            if (answer) {
                                history.push('/rating')
@@ -258,6 +259,7 @@ class Chat extends React.Component{
                                window.location.href = '/'
                            }
                        }
+
                    })
                }
            }

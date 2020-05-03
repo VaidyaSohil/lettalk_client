@@ -2,11 +2,11 @@ import React, { useState } from "react";
 import {Col, Row} from 'react-bootstrap';
 import {connect} from "react-redux";
 import style from "./Page.css"
-import runtimeEnv from "@mars/heroku-js-runtime-env";
 import onlineIcon from '../../Icons/onlineIcon.png';
 import SlideProfile from "../Slide/SlideProfile";
 import {createBrowserHistory} from "history";
 import {Button} from "react-bootstrap";
+import {checkOnline} from "../../action/online";
 
 const history = createBrowserHistory();
 
@@ -42,30 +42,13 @@ class Landing_Page extends React.Component {
 
 
     componentDidMount() {
-        const env = runtimeEnv();
-        fetch(`${env.REACT_APP_API_URL}/online`, {
-            method: 'get',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            mode: 'cors'
+
+        checkOnline().then((res) => {
+            if(res.success && this.state.onlineUser !== res.numberOnline){
+                this.setState({onlineUser:res.numberOnline})
+            }
         })
-            .then((response) => {
-                if (!response.ok) {
-                    throw Error(response.statusText);
-                }
-                return response.json();
-            })
-            .then((res) => {
-                    if(res.success && this.state.onlineUser !== res.numberOnline){
-                        this.setState({onlineUser:res.numberOnline})
-                    }
-                }
-            )
-            .catch((e) => {
-                    console.log(e)
-                }
-            )
+
     }
 
 
