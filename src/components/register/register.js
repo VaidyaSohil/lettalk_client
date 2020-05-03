@@ -84,44 +84,44 @@ class Step1 extends Component {
     }
 
     toStep2() {
-        var valid = true
-        checkValidEmail(this.props.details.email).then( 
-            // on fulfilled:
-            () => {
-                this.setState({error_email: true})
-            },
 
-            // on rejected:
-            () => {
-                this.setState({error_email: false})
-                valid = false
-            }
-        )
+        checkValidEmail(this.props.details.email).then(
+                (res) => {
+                    console.log(res)
+                    if (!res.success) {
+                        this.setState({error_email: true})
+
+                    } else {
+                        this.setState({error_email: false})
+
+                    }
+
+                    if (!this.validName(this.props.details.name)){
+                        this.setState({error_invalid_name: true})
+
+                    } else {
+                        this.setState({error_invalid_name: false})
+                    }
+
+                    if( this.props.details.password1 === "" || this.props.details.password2 === ""){
+                        this.setState({error_password: true})
+
+                    } else {
+                        this.setState({error_password: false})
+                    }
+
+                    if(!this.state.error_email && !this.state.error_invalid_name && !this.state.error_password){
+                        console.log("Continue to next step")
+                        this.props.onContinue()
+                    }
+                console.log("Send valid email",this.state.error_email,this.state.error_invalid_name ,this.state.error_password)
+                })
         
-        if (!this.validName(this.props.details.name)){
-            this.setState({error_invalid_name: true})
-            valid = false
-        } else {
-            this.setState({error_invalid_name: false})
-        }
 
-        if( this.props.details.password1 === "" || this.props.details.password2 === ""){
-            this.setState({error_password: true})
-            valid = false
-        } else {
-            this.setState({error_password: false})
-        }
-
-        if (valid) {
-            this.setState({error_email:false})
-            this.setState({error_invalid_name:false})
-            this.props.onContinue()
-        }
     }
     render(){
         return(
             <div>
-                {console.log(this.state)}
                 {/* Display error messages */}
                 {
                     this.state.error_invalid_name
@@ -136,7 +136,7 @@ class Step1 extends Component {
                     this.state.error_email
                         ?<Col className="d-flex justify-content-center">
                             <Alert variant="danger">
-                                Invalid email
+                                Email is already used
                             </Alert>
                         </Col>
                         : ""
@@ -207,6 +207,7 @@ class Step2 extends Component {
         this.handleChange = this.handleChange.bind(this)
         this.toStep3      = this.toStep3.bind(this)
         this.comeBack = this.comeBack.bind(this)
+        this.state  ={error_gender: false}
     }
 
     handleChange(event){
@@ -214,16 +215,32 @@ class Step2 extends Component {
         this.props.onChange(event)
     }
 
+
     comeBack(){
         this.props.comeBack()
     }
 
     toStep3(){
-        this.props.onContinue()
+        if(this.props.details.gender !== ""){
+            this.props.onContinue()
+        }
+        else{
+            this.setState({error_gender: true})
+        }
+
     }
     render(){
 
         return (
+            <div>
+            {this.state.error_gender
+                    ?<Col className="d-flex justify-content-center">
+                        <Alert variant="danger">
+                            You need to choose a gender
+                        </Alert>
+                    </Col>
+                    : ""
+            }
             <Form className="register" horizontal>
                 <FormGroup controlId="alias">
                     <Col  sm={10}>
@@ -244,22 +261,23 @@ class Step2 extends Component {
                 </FormGroup>
 
                 <div style={{display:'flex'}} >
+
                     <div className="radio">
                         <label>
-                            <input type="radio"  value="Male" name="gender"/>
+                            <input type="radio"  value="Male"  id="gender" name="gender" onChange={this.handleChange}/>
                             Male
                         </label>
                     </div>
                     <div className="radio">
                         <label>
-                            <input type="radio" value="Female" name="gender"/>
+                            <input type="radio" value="Female"  id="gender" name="gender" onChange={this.handleChange}/>
                             Female
                         </label>
                     </div>
 
                     <div className="radio">
                         <label>
-                            <input type="radio" value="Non-binary" name="gender" />
+                            <input type="radio" value="Non-binary" id="gender" name="gender" onChange={this.handleChange}/>
                             Non-binary
                         </label>
                     </div>
@@ -274,7 +292,7 @@ class Step2 extends Component {
                         </Col>
                 </FormGroup>
                 </Form>
-
+            </div>
         )
     }
 }
@@ -383,7 +401,8 @@ class Register extends Component {
                 alias: '',
                 age: '',
                 hobby: predefinedHobby,
-                image: ""
+                image: "",
+                gender: ""
             },
             error_name: false,
             error_password: false,
@@ -393,11 +412,14 @@ class Register extends Component {
     }
 
     updateDetails(event){
+
+        event.preventDefault()
         let updateDetails = Object.assign({}, this.state.details);
         updateDetails[event.target.id] = event.target.value;
         this.setState({
             details: updateDetails
         });
+
     }
 
     addHobby(hobby) {
@@ -480,6 +502,9 @@ class Register extends Component {
         }
     }
 
+    componentWillUnmount() {
+
+    }
 
     render(){
         return (

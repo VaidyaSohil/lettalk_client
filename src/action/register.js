@@ -16,6 +16,11 @@ export function checkValidEmail(email){
             }
             return response.json();
         })
-        .catch( (e) => console.log(e) );
+        .catch( (e) => {
+            console.log(e)
+            return e
+        }
+
+        );
 
 }

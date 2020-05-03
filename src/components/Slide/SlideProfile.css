@@ -1,15 +1,18 @@
 .slideProfile{
-    height: 50vh;
-    width: 50vw;
-    position: relative;
+    position: fixed;
     left: 50%;
     top: 50%;
+    height: 50vh;
+    border-style: double;
+    -webkit-transform: translate(-50%, -50%);
+    -moz-transform: translate(-50%, -50%);
+    -ms-transform: translate(-50%, -50%);
+    -o-transform: translate(-50%, -50%);
     transform: translate(-50%, -50%);
-    border-style: double
 }
 .imgProfile{
-    height:50vh;
-    width:30vw;
+    max-height:70%;
+    max-width: 100%;
 }
 .captionText{
     text-shadow: 1px 1px black;

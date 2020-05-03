@@ -6,7 +6,7 @@ import runtimeEnv from '@mars/heroku-js-runtime-env';
 class Profile extends React.Component {
     constructor(props) {
         super(props);
-        this.state = {alias:"",age:"",hobby:"",interest:"",gender:"",picture:""}
+        this.state = {alias:"",age:"",hobby:"",interest:"",gender:"",picture:"",description: ""}
     }
     componentWillUnmount(){
 
@@ -34,7 +34,8 @@ class Profile extends React.Component {
                         age:userProfile.age,
                         hobby:userProfile.hobby,
                         gender: userProfile.gender,
-                        picture: userProfile.picture
+                        picture: userProfile.picture,
+                        description: userProfile.description
                 }
                 )
 
@@ -48,7 +49,7 @@ class Profile extends React.Component {
     handleSubmit(e){
         e.preventDefault()
         var data = { alias: this.state.alias,age:this.state.age ,hobby: this.state.hobby, interest: this.state.interest,gender:this.state.gender,
-        picture:this.state.picture
+        picture:this.state.picture,description:this.state.description
             ,email: localStorage.getItem('email')
         }
         console.log(data)
@@ -109,6 +110,12 @@ class Profile extends React.Component {
                         <Form.Group >
                             <Form.Label>gender</Form.Label>
                             <Form.Control name="gender" value={this.state.gender} onChange={this.handleChange.bind(this)}/>
+                        </Form.Group>
+
+
+                        <Form.Group >
+                            <Form.Label>Description</Form.Label>
+                            <Form.Control name="description" value={this.state.description} onChange={this.handleChange.bind(this)}/>
                         </Form.Group>
 
                         <Form.Group >
