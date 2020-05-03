@@ -14,7 +14,7 @@ class Rating extends React.Component {
         this.handleClick = this.handleClick.bind(this)
         this.state = {
             text:"",
-            star:5,
+            star:3,
         }
     }
 
@@ -49,7 +49,7 @@ class Rating extends React.Component {
             <div className="container">
                 <div className="form-popup" id="myForm">
                     <Form  className="form-container">
-                        <h1 style={{color:'black'}}>What do you think of this person? Please rate them:</h1>
+                        <h3 style={{color:'black'}}>What do you think of this person? Please rate them:</h3>
                         
                         <ButtonGroup className="d-flex sm">
                             {[1,2,3,4,5].map((value) => {
