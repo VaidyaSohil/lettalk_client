@@ -71,9 +71,11 @@ class Login extends Component {
                     <FormGroup>
                         <Col smOffset={2} sm={10}>
                             <Button onClick={this.login}>Sign in</Button>
-                        </Col>
+                            <GoogleSignIn style={{float:'right'}}/>
+                        </Col >
+
                     </FormGroup>
-                    {/* <GoogleSignIn/> */}
+
                 </Form>
             </div>
         )

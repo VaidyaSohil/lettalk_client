@@ -66,6 +66,7 @@ class Landing_Page extends React.Component {
                         <Welcome onlineUser={this.state.onlineUser}/> :
                         <div>
                             <h1>Hi {this.props.username} </h1>
+                            <p>Check out people just by click on profile, left or right</p>
                             <SlideProfile/>
                         </div>
                     }

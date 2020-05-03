@@ -140,12 +140,12 @@ class SlideProfile extends React.Component {
                                     <p style={{position:'relative',float:'left'}}>Name:</p><p> {`${this.state.userProfile[this.state.index].alias}`}</p>
                                     <p style={{position:'relative',float:'left'}}>Hobby: </p><p>{`${this.state.userProfile[this.state.index].hobby}`}</p>
                                     <p style={{position:'relative',float:'left'}}>Description:</p><p> {`${this.state.userProfile[this.state.index].description}`}</p>
-                                    <p style={{position:'relative',float:'left'}}>Rating: </p><p>{this.state.rating} <AiFillStar /> </p>
+                                    <p style={{position:'relative',float:'left'}}>Rating: </p><p>{this.state.rating ? this.state.rating.toFixed(2) : "Rate me!"} <AiFillStar /> </p>
 
 
                             </div>
                             :
-                            <div><button onClick={this.moveBack}>Sorry, you scroll all people</button></div>
+                            <div><button onClick={this.moveBack}>Hey, no more people for you to check out</button></div>
 
 
                         }

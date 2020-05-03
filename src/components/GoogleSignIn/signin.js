@@ -17,29 +17,17 @@ class Sign_in extends React.Component {
         const {dispatch} = this.props;
         //If success then send to landing page with username
         //if fails, send to landing page but error code
-        if(response.profileObj.email !== "") {
-            var data = {username:response.profileObj.email}
-            localStorage.setItem('email', response.profileObj.email)
-            //Sign in with google?
-            //Stop it for now
-            localStorage.setItem('token',response.tokenId)
+        localStorage.setItem('token',response.tokenId)
+        localStorage.setItem('email', response.profileObj.email)
+        let data = {email:localStorage.getItem('email'),token:localStorage.getItem('token')}
+        dispatch(submitLogin(data))
 
-            dispatch(submitLogin(data))
-        }
-        else
-        {
-            dispatch(submitLogout())
-        }
+
     }
 
 render() {
     return (
-        <div
-            style={{
-                position: 'absolute', left: '50%', top: '50%',
-                transform: 'translate(-50%, -50%)'
-            }}
-        >
+        <div>
             {
                this.props.loggedIn ?  <Landing_Page/>:
 
@@ -52,7 +40,8 @@ render() {
                 />
                 
             }
-        </div>
+        </div
+        >
 
 
 

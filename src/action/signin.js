@@ -1,6 +1,8 @@
 import actionTypes from '../constants/actionType';
 import runtimeEnv from "@mars/heroku-js-runtime-env";
 import {createBrowserHistory} from "history";
+import {submitLogout} from "./signout";
+
 const history = createBrowserHistory();
 const env = runtimeEnv();
 
@@ -40,6 +42,9 @@ export function submitLogin(data){
                     history.push('/')
                     window.location.href = '/'
                 }
+                else{
+                    dispatch(submitLogout())
+                }
             })
             .catch( (e) => console.log(e) );
     }
@@ -67,9 +72,7 @@ export function submitRegister(data){
                 if(res.success) {
                     dispatch(submitLogin(data));
                 }
-                else{
-                    alert("Your email or password is invalid")
-                }
+
             })
             .catch( (e) => console.log(e) );
     }
