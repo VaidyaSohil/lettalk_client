@@ -1,8 +1,11 @@
 import React, { useState } from "react";
 import {Col, Row, Carousel, Image, Form, FormGroup, FormControl} from 'react-bootstrap';
+import {checkIn} from "../../action/online";
 import {connect} from "react-redux";
 import style from "./SlideProfile.css"
+
 import runtimeEnv from "@mars/heroku-js-runtime-env";
+import {AiFillStar} from "react-icons/ai";
 
 async function getOnline(){
     const env = runtimeEnv();
@@ -87,6 +90,7 @@ class SlideProfile extends React.Component {
             async () => {
                 const response = await getRating()
                 if (response.success) {
+                    checkIn()
                     this.setState({rating: response.rating})
                 }
                 else{
@@ -126,17 +130,17 @@ class SlideProfile extends React.Component {
     render() {
         return (
 
-            <Form className="slideProfile"   onClick={this.handleClick}>
+            <Form onClick={this.handleClick}>
                         {( this.state.userProfile.length >  this.state.index && this.state.userProfile.length !== 0) ?
-                            <div
+                            <div className="slideProfile"
                                  ref={this.myInput}
                             >
                                     <img className='imgProfile' style={{width:'100%',height:'50%'}}src={this.state.userProfile[this.state.index].picture !== null ? this.state.userProfile[this.state.index].picture: "https://www.elegantthemes.com/blog/wp-content/uploads/2019/02/Sorry-This-File-Type-Is-Not-Permitted-for-Security-Reasons-Error-Featured-Image.jpg"}
                                          alt="Picture"/>
-                                    <p>Name: {`${this.state.userProfile[this.state.index].alias}`}</p>
-                                    <p>Hobby: {`${this.state.userProfile[this.state.index].hobby}`}</p>
-                                    <p>Description: {`${this.state.userProfile[this.state.index].description}`}</p>
-                                    <p>Rating: {this.state.rating} </p>
+                                    <p style={{position:'relative',float:'left'}}>Name:</p><p> {`${this.state.userProfile[this.state.index].alias}`}</p>
+                                    <p style={{position:'relative',float:'left'}}>Hobby: </p><p>{`${this.state.userProfile[this.state.index].hobby}`}</p>
+                                    <p style={{position:'relative',float:'left'}}>Description:</p><p> {`${this.state.userProfile[this.state.index].description}`}</p>
+                                    <p style={{position:'relative',float:'left'}}>Rating: </p><p>{this.state.rating} <AiFillStar /> </p>
 
 
                             </div>

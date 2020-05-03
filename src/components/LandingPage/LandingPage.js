@@ -6,10 +6,10 @@ import onlineIcon from '../../Icons/onlineIcon.png';
 import SlideProfile from "../Slide/SlideProfile";
 import {createBrowserHistory} from "history";
 import {Button} from "react-bootstrap";
-import {checkOnline} from "../../action/online";
+import {checkIn, checkOnline} from "../../action/online";
+import runtimeEnv from "@mars/heroku-js-runtime-env";
 
 const history = createBrowserHistory();
-
 
 
 class Welcome extends  React.Component {
@@ -43,11 +43,16 @@ class Landing_Page extends React.Component {
 
     componentDidMount() {
 
-        checkOnline().then((res) => {
-            if(res.success && this.state.onlineUser !== res.numberOnline){
-                this.setState({onlineUser:res.numberOnline})
+        let idcheckOnline = setInterval(
+            async () => {
+                const response = await  checkOnline()
+                if(response.success && this.state.onlineUser !== response.numberOnline){
+                    this.setState({onlineUser:response.numberOnline})
+                }
             }
-        })
+            , 5000)
+
+
 
     }
 

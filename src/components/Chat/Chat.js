@@ -15,7 +15,7 @@ import {getRating} from '../../action/chat'
 
 
 import { connect } from 'react-redux';
-import {checkIn} from "../../action/signin";
+import {checkIn} from "../../action/online";
 
 const history = createBrowserHistory();
 
