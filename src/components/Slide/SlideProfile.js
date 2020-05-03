@@ -4,7 +4,51 @@ import {connect} from "react-redux";
 import style from "./SlideProfile.css"
 import runtimeEnv from "@mars/heroku-js-runtime-env";
 
+async function getOnline(){
+    const env = runtimeEnv();
+    return fetch(`${env.REACT_APP_API_URL}/online`, {
+        method: 'get',
+        headers: {
+            'Content-Type': 'application/json',
+            'Authorization': localStorage.getItem('token')
+        },
+        mode: 'cors'
+    })
+        .then((response) => {
+            if (!response.ok) {
+                throw Error(response.statusText);
+            }
+            return response.json();
+    })
+        .catch((e) => {
+                console.log(e)
+                return e
+            }
+        )
+}
 
+async function getRating(){
+    const env = runtimeEnv();
+    return fetch(`${env.REACT_APP_API_URL}/rating?email=${localStorage.getItem('email')}`, {
+        method: 'get',
+        headers: {
+            'Content-Type': 'application/json',
+            'Authorization': localStorage.getItem('token')
+        },
+        mode: 'cors'
+    })
+        .then((response) => {
+            if (!response.ok) {
+                throw Error(response.statusText);
+            }
+            return response.json();
+    })
+        .catch((e) => {
+                console.log(e)
+                return e
+            }
+        )
+}
 class SlideProfile extends React.Component {
     constructor(props) {
         super(props);
@@ -16,58 +60,44 @@ class SlideProfile extends React.Component {
     componentDidMount() {
         //Send request to see online people
         //Call online and update users profile
-        const env = runtimeEnv();
-         fetch(`${env.REACT_APP_API_URL}/online`, {
-            method: 'get',
-            headers: {
-                'Content-Type': 'application/json',
-                'Authorization': localStorage.getItem('token')
-            },
-            mode: 'cors'
+        getOnline().then((response)=>{
+            if (response.success) {
+                this.setState({userProfile:response.userProfile})
+            }
         })
-            .then((response) => {
-                if (!response.ok) {
-                    throw Error(response.statusText);
-                }
-                return response.json();
-            }).then((res)=>
-            {
-                if(res.success){
-                    this.setState({userProfile:res.userProfile})
-                }
-            })
-            .catch((e) => {
-                    console.log(e)
-                    return e
-                }
-            )
+        getRating().then((response) =>{
+            if (response.success) {
+                this.setState({rating: response.rating})
+            }
+        })
 
-         fetch(`${env.REACT_APP_API_URL}/rating?email=${localStorage.getItem('email')}`, {
-            method: 'get',
-            headers: {
-                'Content-Type': 'application/json',
-                'Authorization': localStorage.getItem('token')
-            },
-            mode: 'cors'
-        })
-            .then((response) => {
-                if (!response.ok) {
-                    throw Error(response.statusText);
+        let idOnline = setInterval(
+            async () => {
+                const response = await getOnline()
+                if (response.success) {
+                    this.setState({userProfile:response.userProfile})
                 }
-                return response.json();
-            }).then((res)=>
-            {
-                if(res.success){
-                    this.setState({rating: res.rating})
+                else{
+
                 }
-            })
-            .catch((e) => {
-                    console.log(e)
-                    return e
+            }
+            , 10000)
+
+        let idRating = setInterval(
+            async () => {
+                const response = await getRating()
+                if (response.success) {
+                    this.setState({rating: response.rating})
                 }
-            )
+                else{
+
+                }
+            }
+            , 10000)
 
     }
+
+
     moveBack(){
         this.setState({index: this.state.index - 1})
     }
@@ -97,13 +127,14 @@ class SlideProfile extends React.Component {
         return (
 
             <Form className="slideProfile"   onClick={this.handleClick}>
-                        {( this.state.userProfile.length >  this.state.index ) ?
+                        {( this.state.userProfile.length >  this.state.index && this.state.userProfile.length !== 0) ?
                             <div
                                  ref={this.myInput}
                             >
                                     <img className='imgProfile' style={{width:'100%',height:'50%'}}src={this.state.userProfile[this.state.index].picture !== null ? this.state.userProfile[this.state.index].picture: "https://www.elegantthemes.com/blog/wp-content/uploads/2019/02/Sorry-This-File-Type-Is-Not-Permitted-for-Security-Reasons-Error-Featured-Image.jpg"}
                                          alt="Picture"/>
                                     <p>Name: {`${this.state.userProfile[this.state.index].alias}`}</p>
+                                    <p>Hobby: {`${this.state.userProfile[this.state.index].hobby}`}</p>
                                     <p>Description: {`${this.state.userProfile[this.state.index].description}`}</p>
                                     <p>Rating: {this.state.rating} </p>
 

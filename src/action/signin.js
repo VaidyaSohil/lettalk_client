@@ -4,6 +4,25 @@ import {createBrowserHistory} from "history";
 const history = createBrowserHistory();
 const env = runtimeEnv();
 
+export function checkIn(){
+    const env = runtimeEnv();
+    fetch(`${env.REACT_APP_API_URL}/checkin`, {
+            method: 'POST',
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json',
+                'Authorization': localStorage.getItem('token')
+            },
+            body: JSON.stringify({email:localStorage.getItem('email')}),
+            mode: 'cors'})
+            .then( (response) => {
+                if (!response.ok) {
+                    throw Error(response.statusText);
+                }
+                return response.json();
+            })
+            .catch( (e) => console.log(e) );
+}
 function userLoggedIn(username){
     return {
         type: actionTypes.USER_LOGGEDIN,
@@ -30,13 +49,15 @@ export function submitLogin(data){
                 return response.json();
             })
             .then( (res) => {
-                localStorage.setItem('email', res.email);
-                localStorage.setItem('username', res.name);
-                localStorage.setItem('alias', res.alias);
-                localStorage.setItem('token', res.token);
-                dispatch(userLoggedIn(res.name));
-                history.push('/')
-                window.location.href = '/'
+                if(res.success) {
+                    localStorage.setItem('email', res.email);
+                    localStorage.setItem('username', res.name);
+                    localStorage.setItem('alias', res.alias);
+                    localStorage.setItem('token', res.token);
+                    dispatch(userLoggedIn(res.name));
+                    history.push('/')
+                    window.location.href = '/'
+                }
             })
             .catch( (e) => console.log(e) );
     }

@@ -15,6 +15,8 @@ import {getRating} from '../../action/chat'
 
 
 import { connect } from 'react-redux';
+import {checkIn} from "../../action/signin";
+
 const history = createBrowserHistory();
 
 
@@ -93,6 +95,7 @@ class Chat extends React.Component{
         this.handleMessage = this.handleMessage.bind(this)
         this.sendMessage = this.sendMessage.bind(this)
         localStorage.setItem('feedback',"false")
+        checkIn()
     }
 
     componentWillMount(){
