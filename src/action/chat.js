@@ -1,4 +1,5 @@
 import runtimeEnv from "@mars/heroku-js-runtime-env";
+import {submitLogin} from "./signin";
 
 export function getRating(){
     const env = runtimeEnv();
@@ -40,16 +41,16 @@ export function rating(data){
         })
         .catch((e) => {
                 console.log(e)
+            return e
             }
         )
 
 }
 
-export function exitChat(){
+export function exitChat(data){
     const env = runtimeEnv();
-    let data = {'roomId': localStorage.getItem('roomId'),'email': localStorage.getItem('email')}
     return fetch(`${env.REACT_APP_API_URL}/room`, {
-            method: 'delete',
+            method: 'post',
             headers: {
                 'Content-Type': 'application/json',
                 'Authorization': localStorage.getItem('token')
@@ -65,6 +66,7 @@ export function exitChat(){
             })
             .catch((e) => {
                     console.log(e)
+                    return e
                 }
             )
 }

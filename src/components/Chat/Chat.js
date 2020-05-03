@@ -10,7 +10,7 @@ import Input from '../Input/Input';
 import Messages from '../Messages/Messages';
 import TextContainer from '../TextContainer/TextContainer';
 import runtimeEnv from "@mars/heroku-js-runtime-env";
-import {exitChat,getRating} from '../../action/chat'
+import {getRating} from '../../action/chat'
 
 
 
@@ -86,11 +86,13 @@ async function getAvailRoom() {
 class Chat extends React.Component{
     constructor(props) {
         super(props);
-        this.state={users:'',message:'',messages:[],waiting:true, accept:false, intervalId:0, intervalRoomActive:0,roomIsActive: false, count:0,name:'',room:'',timer:0,interval_timer:0
+        this.state={users:'',message:'',messages:[],waiting:true, accept:false, intervalId:0, intervalRoomActive:0,roomIsActive: false, count:0,name:'',room:'',timer:0,interval_timer:0,
+            quit_before_room : true, intervalGetAvailRoom:0
         }
         //let history = useHistory();
         this.handleMessage = this.handleMessage.bind(this)
         this.sendMessage = this.sendMessage.bind(this)
+        localStorage.setItem('feedback',"false")
     }
 
     componentWillMount(){
@@ -140,8 +142,10 @@ class Chat extends React.Component{
             let id = setInterval(
                 async ()=> {
                     const response = await getAvailRoom()
+                    this.setState({intervalGetAvailRoom: id})
                     if(response.success){
                         clearInterval(id)
+
                         this.setState({waiting:false})
                         localStorage.setItem('roomId', response.msg)
                         localStorage.setItem('percent', response.percent)
@@ -151,12 +155,14 @@ class Chat extends React.Component{
 
                         if (answer === true){
                             //yes
+                            localStorage.setItem('feedback', "true")
+
                             getRating().then( res =>{
                                 if(res.success){
                                     localStorage.setItem('rating',res.rating)
                                 }
                             })
-                            this.setState({accept:true, roomIsActive:true})
+                            this.setState({accept:true, roomIsActive:true, quit_before_room: false})
 
                             history.push({
                                 path: '/room',
@@ -178,26 +184,13 @@ class Chat extends React.Component{
                             let id_roomActive = setInterval(
                                 async ()=> {
                                     const response = await checkRoomActive()
-                                    if(!response.success){
-                                        clearInterval(id_roomActive)
-                                        exitChat().then(response => {
-                                            if (response.success) {
-                                                socket.emit('disconnect', () => {
-                                                })
-                                                let answer =  window.confirm(`This person quit,  Do you want to rate them?`)
-                                                if(answer){
-                                                    history.push('/rating')
-                                                    window.location.href = '/rating'
-                                                }
-                                                else{
-                                                    history.push('/')
-                                                    window.location.href = '/'
-                                                }
+                                    if(!response.success) {
+                                        console.log("Check room is active")
+                                        history.push('/exitRoom')
+                                        window.location.href = '/exitRoom'
 
-
-                                            }
-                                        })
                                     }
+
                                 }
                                 , 1500);
 
@@ -205,18 +198,9 @@ class Chat extends React.Component{
                         }
 
                         else if(answer === false){
-                           clearInterval()
-                           exitChat().then(res =>{
-                               if(res.success){
-                                   socket.emit('disconnect', () => {
-                                   })
-                                   alert(`We will redirect you back`)
+                            history.push('/exitRoom')
+                            window.location.href = '/exitRoom'
 
-                                       history.push('/')
-                                       window.location.href = '/'
-                               }
-
-                           })
 
 
                         }
@@ -228,43 +212,12 @@ class Chat extends React.Component{
 
     }
 
+
     componentWillUnmount() {
-       clearInterval()
-       exitChat().then(res =>{
-           try {
-               if (res.success) {
-                   console.log("Catch error here")
-                   let answer = window.confirm(`Hey, you leave early, Do you want to rate them?`)
-                   if (answer && this.state.waiting === false) {
-                       history.push('/rating')
-                       window.location.href = '/rating'
-                   } else {
-                       history.push('/')
-                       window.location.href = '/'
-                   }
-               }
-           }
-           catch(err) {
-               console.log("Catch error here")
-               if (err) {
-                   exitChat().then(res => {
-                       alert(res)
-                       if (res.success && this.state.waiting === false) {
-                           let answer = window.confirm(`Hey, you leave early,  Do you want to rate them?`)
-                           if (answer) {
-                               history.push('/rating')
-                               window.location.href = '/rating'
-                           } else {
-                               history.push('/')
-                               window.location.href = '/'
-                           }
-                       }
-
-                   })
-               }
-           }
-
+       socket.emit('disconnect', () => {
         })
+        history.push('/exitRoom')
+        window.location.href = '/exitRoom'
     }
 
 

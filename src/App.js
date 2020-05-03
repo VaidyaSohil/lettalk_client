@@ -12,6 +12,7 @@ import store from './stores/stores'
 import { Provider } from 'react-redux'
 import history from './history';
 import Rating from "./components/rating/Rating";
+import ExitRoom from "./components/ExitRoom/ExitRoom";
 
 
 const App = () =>(
@@ -24,6 +25,7 @@ const App = () =>(
             <Route path="/profile" exact component={Profile}/>
             <Route path="/chat" exact component={Chat}/>
             <Route path="/rating" exact component={Rating}/>
+            <Route path="/exitRoom" exact component={ExitRoom}/>
             <Route path="/testing" exact component={Rating}/>
         </Router>
     </Provider>
