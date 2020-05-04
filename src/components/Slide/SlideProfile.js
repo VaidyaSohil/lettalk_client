@@ -98,7 +98,7 @@ class SlideProfile extends React.Component {
                 this.setState({index: this.state.index - 1})
             }
             else{
-                alert("That the end of picture")
+                this.setState({index: this.state.userProfile.length - 1})
             }
         }
         else if(e.clientX > outerElement){
@@ -106,7 +106,7 @@ class SlideProfile extends React.Component {
                 this.setState({index: this.state.index + 1})
             }
             else{
-                alert("That the end of picture")
+                this.setState({index: 0})
             }
         }
     }
