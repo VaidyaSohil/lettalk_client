@@ -63,17 +63,12 @@ class SlideProfile extends React.Component {
     componentDidMount() {
         //Send request to see online people
         //Call online and update users profile
-        getOnline().then((response)=>{
+
+        getOnline().then(response=>{
             if (response.success) {
                 this.setState({userProfile:response.userProfile})
             }
         })
-        getRating().then((response) =>{
-            if (response.success) {
-                this.setState({rating: response.rating})
-            }
-        })
-
         let idOnline = setInterval(
             async () => {
                 const response = await getOnline()
@@ -84,20 +79,8 @@ class SlideProfile extends React.Component {
 
                 }
             }
-            , 10000)
+            , 5000)
 
-        let idRating = setInterval(
-            async () => {
-                const response = await getRating()
-                if (response.success) {
-                    checkIn()
-                    this.setState({rating: response.rating})
-                }
-                else{
-
-                }
-            }
-            , 10000)
 
     }
 
@@ -140,7 +123,7 @@ class SlideProfile extends React.Component {
                                     <p style={{position:'relative',float:'left'}}>Name:</p><p> {`${this.state.userProfile[this.state.index].alias}`}</p>
                                     <p style={{position:'relative',float:'left'}}>Hobby: </p><p>{`${this.state.userProfile[this.state.index].hobby}`}</p>
                                     <p style={{position:'relative',float:'left'}}>Description:</p><p> {`${this.state.userProfile[this.state.index].description}`}</p>
-                                    <p style={{position:'relative',float:'left'}}>Rating: </p><p>{this.state.rating ? this.state.rating.toFixed(2) : "Rate me!"} <AiFillStar /> </p>
+                                    <p style={{position:'relative',float:'left'}}>Rating: </p><p>{this.state.userProfile[this.state.index].rating ? this.state.userProfile[this.state.index].rating.toFixed(2) : "Rate me!"} <AiFillStar /> </p>
 
 
                             </div>
