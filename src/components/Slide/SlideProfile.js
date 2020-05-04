@@ -69,8 +69,11 @@ class SlideProfile extends React.Component {
                 this.setState({userProfile:response.userProfile})
             }
         })
+        checkIn()
+
         let idOnline = setInterval(
             async () => {
+                checkIn()
                 const response = await getOnline()
                 if (response.success) {
                     this.setState({userProfile:response.userProfile})
@@ -80,7 +83,6 @@ class SlideProfile extends React.Component {
                 }
             }
             , 5000)
-
 
     }
 
