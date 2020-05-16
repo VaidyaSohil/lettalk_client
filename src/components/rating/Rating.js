@@ -47,8 +47,6 @@ class Rating extends React.Component {
 
     render(){
         return (
-            <div className="container">
-                <div className="form-popup" id="myForm">
                     <Form  className="form-container">
                         <h3 style={{color:'black'}}>What do you think of this person? Please rate them:</h3>
                         
@@ -78,8 +76,6 @@ class Rating extends React.Component {
 
                         <button type="submit" className="btn" onClick={this.onSubmit}>Submit Feedback</button>
                     </Form>
-                </div>
-            </div>
         )
     }
 }

@@ -13,9 +13,14 @@
     background: #FFFFFF;
     border-radius: 8px;
     height: 60%;
-    width: 35%;
+    width: 100%;
 }
 
+.match{
+    height:50vh;
+    position:absolute;
+    left:40%;
+}
 
 .advertise {
     top:40%;
@@ -67,7 +72,10 @@ div>p>span:nth-child(3){
     .advertise {
         width:40vw;
         height:50%;
+    }
 
+    .match {
+        left:20%;
     }
 }
 

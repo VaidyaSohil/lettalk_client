@@ -195,7 +195,7 @@ class Chat extends React.Component{
                                     }
 
                                 }
-                                , 1500);
+                                , 30000);
 
 
                         }
@@ -251,7 +251,7 @@ class Chat extends React.Component{
                     localStorage.getItem('email')?    (
                     this.state.accept  ? (
                         <div className="outerContainer" >
-                            <div className="container" style={{width:'100vw',height:'80vh'}}>
+                            <div className="container" >
                                 <InfoBar room={this.state.room}/>
                                 <Messages messages={this.state.messages} name={this.state.name}/>
                                 <Input message={this.state.message} onMessageChange = {this.handleMessage} sendMessage = {this.sendMessage}/>
@@ -259,7 +259,7 @@ class Chat extends React.Component{
                             <TextContainer users={this.state.users}/>
                         </div>
                     ): (
-                        <div style={{height:"50vh",position:"absolute",left:"40%"}}>
+                        <div className="match">
                             <p>Please wait, we are matching you
                                 <span > . </span>
                                 <span>  . </span>
