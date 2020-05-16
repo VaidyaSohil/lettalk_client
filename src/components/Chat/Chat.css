@@ -28,6 +28,30 @@
 
 }
 
+div>p>span:nth-child(1){
+    width:100%;
+    height: 100%;
+    animation: appear 1s infinite;
+}
+
+div>p>span:nth-child(2){
+    width:100%;
+    height: 100%;
+    animation: appear 2.5s infinite;
+}
+div>p>span:nth-child(3){
+    width:100%;
+    height: 100%;
+    animation: appear 4s infinite;
+}
+
+@keyframes appear{
+    from {font-size: 0px}
+    to {font-size: 30px;}
+
+}
+
+
 
 
 @media (min-width: 320px) and (max-width: 600px) {

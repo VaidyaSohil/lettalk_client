@@ -259,8 +259,12 @@ class Chat extends React.Component{
                             <TextContainer users={this.state.users}/>
                         </div>
                     ): (
-                        <div style={{height:"50vh"}}>
-                            <p>Please wait, we are matching you...</p>
+                        <div style={{height:"50vh",position:"absolute",left:"40%"}}>
+                            <p>Please wait, we are matching you
+                                <span > . </span>
+                                <span>  . </span>
+                                <span> . </span>
+                            </p>
 
                             <div 
                                 className="advertise"
