@@ -43,6 +43,12 @@ class Landing_Page extends React.Component {
 
     componentDidMount() {
 
+        checkOnline().then(response=>{
+            if(response.success && this.state.onlineUser !== response.numberOnline){
+                this.setState({onlineUser:response.numberOnline})
+            }
+        })
+
         let idcheckOnline = setInterval(
             async () => {
                 console.log("Check online")

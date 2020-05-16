@@ -113,11 +113,9 @@ class SlideProfile extends React.Component {
     render() {
         return (
 
-            <div style={{height:"100%"}} onClick={this.handleClick}>
+            <div className="slideProfile"  onClick={this.handleClick}>
                         {( this.state.userProfile.length >  this.state.index && this.state.userProfile.length !== 0) ?
-                           <div className="slideProfile"
-                                 ref={this.myInput}
-                            >
+                           <div ref={this.myInput}>
                                     <img className='imgProfile' style={{width:'100%',height:'50%'}}src={this.state.userProfile[this.state.index].picture !== null ? this.state.userProfile[this.state.index].picture: "https://www.elegantthemes.com/blog/wp-content/uploads/2019/02/Sorry-This-File-Type-Is-Not-Permitted-for-Security-Reasons-Error-Featured-Image.jpg"}
                                          alt="Picture"/>
                                          <br/>

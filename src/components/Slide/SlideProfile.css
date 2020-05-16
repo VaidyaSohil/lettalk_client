@@ -2,7 +2,8 @@
     position: absolute;
     left: 43%;
     border-style: double;
-
+    width:300px;
+    border-radius: 5px;
 }
 .imgProfile{
     max-height:70%;
