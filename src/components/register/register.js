@@ -210,8 +210,8 @@ class Step2 extends Component {
         this.state  ={error_gender: false}
     }
 
+
     handleChange(event){
-        event.preventDefault()
         this.props.onChange(event)
     }
 
@@ -260,7 +260,7 @@ class Step2 extends Component {
                     </Col>
                 </FormGroup>
 
-                <div style={{display:'flex'}} >
+                <div style={{display:'flex', margin: "0px 0px 0px 20px"}} >
 
                     <div className="radio">
                         <label>
@@ -270,7 +270,7 @@ class Step2 extends Component {
                     </div>
                     <div className="radio">
                         <label>
-                            <input type="radio" value="Female"  id="gender" name="gender" onChange={this.handleChange}/>
+                            <input type="radio" value="Female" id="gender"   name="gender" onChange={this.handleChange}/>
                             Female
                         </label>
                     </div>
@@ -329,6 +329,8 @@ class Step3 extends Component {
     }
 
     updateDetails(event) {
+
+
         let updateDetails = Object.assign({}, this.state.details);
 
         updateDetails[event.target.id] = event.target.value;
@@ -336,6 +338,7 @@ class Step3 extends Component {
           details: updateDetails,
         });
     }
+
     handleRemove(event){
         event.preventDefault()
         this.props.onRemove(event)
@@ -413,13 +416,11 @@ class Register extends Component {
 
     updateDetails(event){
 
-        event.preventDefault()
         let updateDetails = Object.assign({}, this.state.details);
         updateDetails[event.target.id] = event.target.value;
         this.setState({
             details: updateDetails
         });
-
     }
 
     addHobby(hobby) {

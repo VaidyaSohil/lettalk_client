@@ -36,7 +36,7 @@ export function checkOnline(){
             return response.json();
         })
         .catch((e) => {
-                console.log(e)
+                return e
             }
         )
 }

@@ -3,7 +3,7 @@ import {Navbar, NavItem, Nav,Container} from 'react-bootstrap';
 import { connect } from 'react-redux'
 import {Link} from 'react-router-dom';
 import {submitLogout} from '../../action/signout'
-
+import './lettalkheader.css'
 
 class LetTalkHeader extends Component {
     constructor(props) {
@@ -29,19 +29,19 @@ class LetTalkHeader extends Component {
                 <Navbar bg="light" expand="lg">
                     <Navbar.Brand><Link to="/">LET TALK</Link></Navbar.Brand>
                       <Nav className="ml-auto">
-                          <Container >
+                          <Container style={{backgroundColor: "transparent" }}>
                               {
                                   this.props.loggedIn ? (
-                                      <div >
-                                         <NavItem > < Link to="/chat" >Chat</Link></NavItem>
-                                         <NavItem > < Link to="/profile" >Profile</Link></NavItem>
-                                         <NavItem > < Link to="/" onClick={this.handleLogout.bind(this)}>Logout</Link></NavItem>
+                                      <div className="header">
+                                         <span><NavItem > < Link to="/chat" >Chat</Link></NavItem></span>
+                                         <span><NavItem > < Link to="/profile" >Profile</Link></NavItem></span>
+                                         <span><NavItem > < Link to="/" onClick={this.handleLogout.bind(this)}>Logout</Link></NavItem></span>
                                       </div>
                                       )
                                   : (
-                                      <div style={{display:'flex'}}>
-                                          <NavItem><Link to="/login">Login</Link></NavItem>
-                                          <NavItem><Link style={{margin:'10px 10px 10px 10px', padding:'10px 10px 10px 10px',position:'relative',right:'10px'}} to="/register">Register</Link></NavItem>
+                                      <div className="header">
+                                          <span><NavItem><Link to="/login">Login</Link></NavItem></span>
+                                          <span><NavItem><Link to="/register">Register</Link></NavItem></span>
                                       </div>
                                       )
                               }

@@ -69,11 +69,9 @@ class SlideProfile extends React.Component {
                 this.setState({userProfile:response.userProfile})
             }
         })
-        checkIn()
 
         let idOnline = setInterval(
             async () => {
-                checkIn()
                 const response = await getOnline()
                 if (response.success) {
                     this.setState({userProfile:response.userProfile})
@@ -82,7 +80,7 @@ class SlideProfile extends React.Component {
 
                 }
             }
-            , 5000)
+            , 60000)
 
     }
 
@@ -115,13 +113,14 @@ class SlideProfile extends React.Component {
     render() {
         return (
 
-            <Form onClick={this.handleClick}>
+            <div style={{height:"100%"}} onClick={this.handleClick}>
                         {( this.state.userProfile.length >  this.state.index && this.state.userProfile.length !== 0) ?
-                            <div className="slideProfile"
+                           <div className="slideProfile"
                                  ref={this.myInput}
                             >
                                     <img className='imgProfile' style={{width:'100%',height:'50%'}}src={this.state.userProfile[this.state.index].picture !== null ? this.state.userProfile[this.state.index].picture: "https://www.elegantthemes.com/blog/wp-content/uploads/2019/02/Sorry-This-File-Type-Is-Not-Permitted-for-Security-Reasons-Error-Featured-Image.jpg"}
                                          alt="Picture"/>
+                                         <br/>
                                     <p style={{position:'relative',float:'left'}}>Name:</p><p> {`${this.state.userProfile[this.state.index].alias}`}</p>
                                     <p style={{position:'relative',float:'left'}}>Hobby: </p><p>{`${this.state.userProfile[this.state.index].hobby}`}</p>
                                     <p style={{position:'relative',float:'left'}}>Description:</p><p> {`${this.state.userProfile[this.state.index].description}`}</p>
@@ -134,7 +133,7 @@ class SlideProfile extends React.Component {
 
 
                         }
-            </Form>
+            </div>
 
 
         )

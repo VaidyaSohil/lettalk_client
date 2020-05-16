@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import {Form, Button} from 'react-bootstrap';
 import {connect} from "react-redux";
 import runtimeEnv from '@mars/heroku-js-runtime-env';
-
+import './profile.css'
 class Profile extends React.Component {
     constructor(props) {
         super(props);

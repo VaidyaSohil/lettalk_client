@@ -3,6 +3,7 @@ import { submitLogin }  from "../../action/signin";
 import { connect } from 'react-redux';
 import {Col, Form, FormGroup, FormControl, Button, Alert} from 'react-bootstrap';
 import GoogleSignIn from '../GoogleSignIn/signin'
+import './SignIn.css'
 class Login extends Component {
 
     constructor(props) {
@@ -49,21 +50,21 @@ class Login extends Component {
                         : ""
                 }
 
-                <Form style={{ margin: 'auto',left:'45%', position:'relative'}}>
+                <Form >
                     <FormGroup controlId="email">
-                        <Col sm={2}>
+                        <Col >
                             Email
                         </Col>
-                        <Col sm={2}>
+                        <Col >
                             <FormControl onChange={this.updateDetails} value={this.state.details.username} type="email" placeholder="Email" />
                         </Col>
                     </FormGroup>
 
                     <FormGroup controlId="password">
-                        <Col  sm={2}>
+                        <Col  >
                             Password
                         </Col>
-                        <Col sm={2}>
+                        <Col >
                             <FormControl onChange={this.updateDetails} value={this.state.details.password} type="password" placeholder="Password" />
                         </Col>
                     </FormGroup>

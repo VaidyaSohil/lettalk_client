@@ -45,12 +45,13 @@ class Landing_Page extends React.Component {
 
         let idcheckOnline = setInterval(
             async () => {
+                console.log("Check online")
                 const response = await  checkOnline()
                 if(response.success && this.state.onlineUser !== response.numberOnline){
                     this.setState({onlineUser:response.numberOnline})
                 }
             }
-            , 5000)
+            , 60000)
 
 
 

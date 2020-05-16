@@ -1,14 +1,8 @@
 .slideProfile{
-    position: fixed;
-    left: 50%;
-    top: 50%;
-    height: 50vh;
+    position: absolute;
+    left: 43%;
     border-style: double;
-    -webkit-transform: translate(-50%, -50%);
-    -moz-transform: translate(-50%, -50%);
-    -ms-transform: translate(-50%, -50%);
-    -o-transform: translate(-50%, -50%);
-    transform: translate(-50%, -50%);
+
 }
 .imgProfile{
     max-height:70%;
@@ -19,8 +13,7 @@
 }
 @media only screen and (max-width: 600px) {
     .slideProfile{
-        height: 20vh;
-        width: 50vw;
+        left: 20%;
     }
     .imgProfile{
         height:20vh;

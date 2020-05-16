@@ -18,9 +18,9 @@
 
 
 .advertise {
-    top:50%;
-    left:50%;
-    position: relative;
+    top:40%;
+    left:40%;
+    position: absolute;
     border: 15px solid green;
     box-sizing: content-box;
     width:20vw;

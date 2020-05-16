@@ -14,14 +14,16 @@ class Sign_in extends React.Component {
 }
     //If true then set props.loggedIn = true
     responseGoogle(response){
-        const {dispatch} = this.props;
-        //If success then send to landing page with username
-        //if fails, send to landing page but error code
-        localStorage.setItem('token',response.tokenId)
-        localStorage.setItem('email', response.profileObj.email)
-        let data = {email:localStorage.getItem('email'),token:localStorage.getItem('token')}
-        dispatch(submitLogin(data))
-
+        if(!response.error)
+        {
+            const {dispatch} = this.props;
+            //If success then send to landing page with username
+            //if fails, send to landing page but error code
+            localStorage.setItem('token', response.tokenId)
+            localStorage.setItem('email', response.profileObj.email)
+            let data = {email: localStorage.getItem('email'), token: localStorage.getItem('token')}
+            dispatch(submitLogin(data))
+        }
 
     }
 
