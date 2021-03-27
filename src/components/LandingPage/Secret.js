@@ -9,7 +9,7 @@ class Secret extends  React.Component {
     }
 
     onClick(){
-      fetch("https://pure-beach-98773.herokuapp.com/v1/cars/secret",{mode: 'cors'})
+      fetch("https://pure-beach-98773.herokuapp.com/v1/drivers",{mode: 'cors'})
       .then(res => res.json())
       
     }
