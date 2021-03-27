@@ -9,7 +9,7 @@ class Cors extends  React.Component {
     }
 
     onClick(){
-      fetch("https://google.com")
+      fetch("http://54.218.102.114:8080/v1/cars")
       .then(res => res.json())
       
     }
