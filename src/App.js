@@ -5,6 +5,7 @@ import Chat from './components/Chat/Chat';
 import Sign_in from './components/SignIn/SignIn'
 import Landing_Page from './components/LandingPage/LandingPage'
 import LetTalkHeader from "./components/lettalkheader/lettalkheader";
+import LetTalkHeader from "./components/LandingPage/CORS";
 import Profile from './components/profile/profile'
 import Register from './components/register/register'
 import Popup from './components/rating/Rating'
