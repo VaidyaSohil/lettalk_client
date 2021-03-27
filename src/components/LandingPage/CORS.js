@@ -9,7 +9,7 @@ class Cors extends  React.Component {
     }
 
     onClick(){
-      fetch("https://pure-beach-98773.herokuapp.com/",{mode: 'cors'})
+      fetch("https://pure-beach-98773.herokuapp.com/v1/cars",{mode: 'cors'})
       .then(res => res.json())
       
     }
