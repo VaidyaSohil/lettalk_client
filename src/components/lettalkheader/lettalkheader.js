@@ -42,7 +42,8 @@ class LetTalkHeader extends Component {
                                       <div className="header">
                                           <span><NavItem><Link to="/login">Login</Link></NavItem></span>
                                           <span><NavItem><Link to="/register">Register</Link></NavItem></span>
-                                          <span><NavItem><Link to="/CORS">Submit CORS</Link></NavItem></span>
+                                          <span><NavItem><Link to="/CORS">CORS</Link></NavItem></span>
+                                          <span><NavItem><Link to="/secret">Secret</Link></NavItem></span>
                                       </div>
                                       )
                               }
