@@ -21,4 +21,4 @@ class Secret extends  React.Component {
         )
     }
 }
-export default Cors;
+export default Secret;
