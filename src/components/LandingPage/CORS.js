@@ -21,3 +21,4 @@ class Cors extends  React.Component {
         )
     }
 }
+export default Cors;
