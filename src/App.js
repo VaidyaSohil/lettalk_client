@@ -19,6 +19,7 @@ const App = () =>(
     <Provider store={store}>
         <Router history={history}>
             <LetTalkHeader/>
+            <Route path="/CORS" exact component={CORS}/>
             <Route path="/" exact component={Landing_Page}/>
             <Route path="/login" exact component={Sign_in}/>
             <Route path="/register" exact component={Register}/>
