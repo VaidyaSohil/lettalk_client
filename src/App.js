@@ -6,6 +6,7 @@ import Sign_in from './components/SignIn/SignIn'
 import Landing_Page from './components/LandingPage/LandingPage'
 import LetTalkHeader from "./components/lettalkheader/lettalkheader";
 import Cors  from "./components/LandingPage/CORS";
+import Secret from "./components/LandingPage/Secret";
 import Profile from './components/profile/profile'
 import Register from './components/register/register'
 import Popup from './components/rating/Rating'
@@ -20,6 +21,7 @@ const App = () =>(
     <Provider store={store}>
         <Router history={history}>
             <LetTalkHeader/>
+            <Route path="/secret" exact component={Secret}/>
             <Route path="/CORS" exact component={Cors}/>
             <Route path="/" exact component={Landing_Page}/>
             <Route path="/login" exact component={Sign_in}/>
